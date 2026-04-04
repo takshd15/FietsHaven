@@ -1,0 +1,2 @@
+# Netlify (and similar): SPA fallback — every path serves index.html
+/*    /index.html   200

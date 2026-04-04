@@ -82,6 +82,13 @@ export function ProductDetail({ product }: ProductDetailProps) {
   const moreDetails = product.moreDetails?.trim();
 
   useEffect(() => {
+    document.title = `${product.title} | Fiets Haven`;
+    return () => {
+      document.title = "Fiets Haven — Electric bikes & accessories";
+    };
+  }, [product.title]);
+
+  useEffect(() => {
     if (!addedToCart) return;
     const t = window.setTimeout(() => setAddedToCart(false), 2600);
     return () => window.clearTimeout(t);

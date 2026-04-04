@@ -9,6 +9,7 @@ import { PoliciesIndexPage } from "./pages/PoliciesIndexPage.tsx";
 import { PolicyOrderingPage } from "./pages/PolicyOrderingPage.tsx";
 import { PolicyRefundPage } from "./pages/PolicyRefundPage.tsx";
 import { PolicyDamagedPage } from "./pages/PolicyDamagedPage.tsx";
+import { NotFoundPage } from "./pages/NotFoundPage.tsx";
 
 export default function App() {
   return (
@@ -25,6 +26,7 @@ export default function App() {
           <Route path="/policies/ordering" element={<PolicyOrderingPage />} />
           <Route path="/policies/refund" element={<PolicyRefundPage />} />
           <Route path="/policies/damaged" element={<PolicyDamagedPage />} />
+          <Route path="*" element={<NotFoundPage />} />
         </Route>
       </Routes>
       </CartProvider>

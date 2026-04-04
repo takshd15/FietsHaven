@@ -1,5 +1,4 @@
-/** E.164 without + for wa.me */
-export const WHATSAPP_ORDER_NUMBER = "31631381465";
+import { getWhatsAppPhone } from "../config/env.ts";
 
 const ACCESSORY_SLUGS = new Set(["smart-key-remote", "ride-essentials"]);
 
@@ -26,7 +25,7 @@ export function buildProductOrderMessage(
 }
 
 export function buildWhatsAppUrl(encodedMessage: string): string {
-  return `https://wa.me/${WHATSAPP_ORDER_NUMBER}?text=${encodedMessage}`;
+  return `https://wa.me/${getWhatsAppPhone()}?text=${encodedMessage}`;
 }
 
 export function openWhatsAppOrder(message: string): void {
