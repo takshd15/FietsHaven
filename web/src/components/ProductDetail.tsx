@@ -1,0 +1,516 @@
+import { motion, AnimatePresence, useReducedMotion, type Variants } from "framer-motion";
+import { Link } from "react-router-dom";
+import { useCallback, useEffect, useState } from "react";
+import {
+  ArrowLeft,
+  Award,
+  Check,
+  ChevronDown,
+  Package,
+  RotateCcw,
+  ShieldCheck,
+  Star,
+  Truck,
+} from "lucide-react";
+import { useCart } from "../context/CartContext.tsx";
+import { buildProductOrderMessage, openWhatsAppOrder } from "../lib/whatsapp.ts";
+import { BikeShowcaseCarousel } from "./BikeShowcaseCarousel.tsx";
+import type { Product } from "../data/catalog.ts";
+
+const easeOut = "easeOut" as const;
+
+const detailStagger: Variants = {
+  hidden: { opacity: 0 },
+  show: {
+    opacity: 1,
+    transition: { staggerChildren: 0.06, delayChildren: 0.06 },
+  },
+};
+
+const detailItem: Variants = {
+  hidden: { opacity: 0, y: 12 },
+  show: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.4, ease: easeOut },
+  },
+};
+
+function StarRow({ rating, size = "md" }: { rating: number; size?: "sm" | "md" }) {
+  const dim = size === "sm" ? "h-3.5 w-3.5" : "h-4 w-4 sm:h-[18px] sm:w-[18px]";
+  return (
+    <div
+      className="flex items-center gap-0.5"
+      aria-label={`${rating} out of 5 stars`}
+    >
+      {Array.from({ length: 5 }, (_, i) => {
+        const filled = i < Math.floor(rating);
+        const half =
+          !filled && i === Math.floor(rating) && rating % 1 >= 0.25 && rating % 1 < 1;
+        return (
+          <Star
+            key={i}
+            className={`${dim} ${
+              filled
+                ? "fill-amber-400 text-amber-400"
+                : half
+                  ? "fill-amber-400/55 text-amber-400"
+                  : "fill-gray-200 text-gray-200"
+            }`}
+            strokeWidth={1.5}
+          />
+        );
+      })}
+    </div>
+  );
+}
+
+type ProductDetailProps = {
+  product: Product;
+};
+
+export function ProductDetail({ product }: ProductDetailProps) {
+  const reduceMotion = useReducedMotion();
+  const { addToCart } = useCart();
+  const [quantity, setQuantity] = useState(1);
+  const [addedToCart, setAddedToCart] = useState(false);
+  const [addCooldown, setAddCooldown] = useState(false);
+  const [buyCooldown, setBuyCooldown] = useState(false);
+  const [showAddedToast, setShowAddedToast] = useState(false);
+
+  const lowStock = product.lowStockCount;
+  const moreDetails = product.moreDetails?.trim();
+
+  useEffect(() => {
+    if (!addedToCart) return;
+    const t = window.setTimeout(() => setAddedToCart(false), 2600);
+    return () => window.clearTimeout(t);
+  }, [addedToCart]);
+
+  useEffect(() => {
+    if (!showAddedToast) return;
+    const t = window.setTimeout(() => setShowAddedToast(false), 3200);
+    return () => window.clearTimeout(t);
+  }, [showAddedToast]);
+
+  const handleAddToCart = useCallback(() => {
+    addToCart({
+      slug: product.slug,
+      title: product.title,
+      price: product.price,
+      quantity,
+    });
+    setAddedToCart(true);
+    setShowAddedToast(true);
+    setAddCooldown(true);
+    window.setTimeout(() => setAddCooldown(false), 800);
+  }, [addToCart, product.slug, product.title, product.price, quantity]);
+
+  const handleBuyNow = useCallback(() => {
+    const message = buildProductOrderMessage(
+      product.title,
+      product.price,
+      quantity,
+      product.slug,
+    );
+    openWhatsAppOrder(message);
+    setBuyCooldown(true);
+    window.setTimeout(() => setBuyCooldown(false), 1200);
+  }, [product.slug, product.title, product.price, quantity]);
+
+  const pageFrom = reduceMotion ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 };
+
+  const addDisabled = addCooldown;
+  const buyDisabled = buyCooldown;
+
+  return (
+    <motion.div
+      className="min-h-screen bg-[#f4f4f5] pb-28 lg:pb-12"
+      initial={pageFrom}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: reduceMotion ? 0 : 0.45, ease: easeOut }}
+    >
+      <AnimatePresence>
+        {showAddedToast ? (
+          <motion.div
+            key="added-toast"
+            role="status"
+            initial={{ opacity: 0, y: -16 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -12 }}
+            transition={{ duration: 0.25, ease: easeOut }}
+            className="fixed left-1/2 top-20 z-[100] max-w-[min(90vw,20rem)] -translate-x-1/2 rounded-xl bg-gray-900 px-5 py-3 text-center text-sm font-semibold text-white shadow-lg"
+          >
+            Added to cart ✅
+          </motion.div>
+        ) : null}
+      </AnimatePresence>
+
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 lg:py-10 py-6">
+        <motion.div
+          initial={reduceMotion ? false : { opacity: 0, y: 6 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.3, ease: easeOut }}
+        >
+          <Link
+            to="/"
+            className="inline-flex items-center gap-2 text-sm font-medium text-gray-600 transition-colors hover:text-gray-900"
+          >
+            <ArrowLeft className="h-4 w-4" strokeWidth={2} />
+            Back to shop
+          </Link>
+        </motion.div>
+
+        <div className="mt-8 grid grid-cols-1 gap-10 lg:grid-cols-12 lg:gap-8 lg:items-start">
+          {/* Gallery */}
+          <motion.div
+            className="lg:col-span-5"
+            initial={reduceMotion ? false : { opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.35, ease: easeOut }}
+          >
+            <BikeShowcaseCarousel productLabel={product.title} variant="pdp" />
+          </motion.div>
+
+          {/* Center: details */}
+          <motion.div
+            className="lg:col-span-4 space-y-5"
+            variants={detailStagger}
+            initial="hidden"
+            animate="show"
+          >
+            <motion.div variants={detailItem} className="flex flex-wrap items-center gap-2">
+              {product.bestSeller ? (
+                <span className="inline-flex items-center gap-1 rounded-full bg-amber-100 px-2.5 py-1 text-xs font-semibold text-amber-900">
+                  <Award className="h-3.5 w-3.5" strokeWidth={2} />
+                  Best seller
+                </span>
+              ) : null}
+              <span className="inline-flex items-center gap-1 rounded-full bg-gray-100 px-2.5 py-1 text-xs font-medium text-gray-700">
+                <ShieldCheck className="h-3.5 w-3.5" strokeWidth={2} />
+                30-day returns · 2-year warranty
+              </span>
+            </motion.div>
+
+            <motion.div variants={detailItem}>
+              <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-gray-400">
+                Fiets Haven
+              </p>
+              <h1 className="mt-2 text-2xl font-bold tracking-tight text-gray-900 sm:text-3xl lg:text-[1.75rem] lg:leading-tight">
+                {product.title}
+              </h1>
+            </motion.div>
+
+            <motion.div variants={detailItem}>
+              <a
+                href="#reviews"
+                className="inline-flex flex-wrap items-center gap-2 text-sm text-gray-600 transition-colors hover:text-gray-900"
+              >
+                <StarRow rating={product.rating} />
+                <span className="font-semibold text-gray-900">
+                  {product.rating}/5
+                </span>
+                <span className="text-gray-500">
+                  ({product.reviewCount} reviews)
+                </span>
+              </a>
+            </motion.div>
+
+            <motion.p
+              variants={detailItem}
+              className="text-base leading-relaxed text-gray-600 sm:text-[17px]"
+            >
+              {product.description}
+            </motion.p>
+
+            <motion.div variants={detailItem}>
+              <h2 className="text-sm font-semibold text-gray-900">Highlights</h2>
+              <ul className="mt-3 space-y-2.5">
+                {product.features.map((line) => (
+                  <li key={line} className="flex gap-3 text-sm text-gray-700">
+                    <Check
+                      className="mt-0.5 h-4 w-4 shrink-0 text-emerald-600"
+                      strokeWidth={2.5}
+                    />
+                    {line}
+                  </li>
+                ))}
+              </ul>
+            </motion.div>
+
+            {moreDetails ? (
+              <motion.div variants={detailItem}>
+                <details className="group rounded-xl bg-white ring-1 ring-gray-200/90 open:shadow-sm">
+                  <summary className="flex cursor-pointer list-none items-center justify-between gap-3 px-4 py-4 text-sm font-semibold text-gray-900 marker:content-none [&::-webkit-details-marker]:hidden">
+                    More details
+                    <ChevronDown
+                      className="h-5 w-5 shrink-0 text-gray-400 transition-transform group-open:rotate-180"
+                      strokeWidth={2}
+                    />
+                  </summary>
+                  <div className="border-t border-gray-100 px-4 pb-4 pt-2">
+                    <p className="text-sm leading-relaxed text-gray-600">
+                      {moreDetails}
+                    </p>
+                  </div>
+                </details>
+              </motion.div>
+            ) : null}
+          </motion.div>
+
+          {/* Right: purchase box — desktop */}
+          <motion.aside
+            className="hidden lg:col-span-3 lg:block"
+            initial={reduceMotion ? false : { opacity: 0, x: 28 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.5, ease: easeOut, delay: reduceMotion ? 0 : 0.08 }}
+          >
+            <div className="sticky top-24 rounded-xl border border-gray-200/80 bg-white p-6 shadow-md">
+              <PurchasePanel
+                product={product}
+                quantity={quantity}
+                setQuantity={setQuantity}
+                onAddToCart={handleAddToCart}
+                onBuyNow={handleBuyNow}
+                addedToCart={addedToCart}
+                addDisabled={addDisabled}
+                buyDisabled={buyDisabled}
+                lowStock={lowStock}
+              />
+            </div>
+          </motion.aside>
+
+          {/* Purchase card — mobile (in flow) */}
+          <div className="lg:col-span-12 lg:hidden">
+            <div className="rounded-xl border border-gray-200/80 bg-white p-6 shadow-md">
+              <PurchasePanel
+                product={product}
+                quantity={quantity}
+                setQuantity={setQuantity}
+                onAddToCart={handleAddToCart}
+                onBuyNow={handleBuyNow}
+                addedToCart={addedToCart}
+                addDisabled={addDisabled}
+                buyDisabled={buyDisabled}
+                lowStock={lowStock}
+                compactTrust
+              />
+            </div>
+          </div>
+        </div>
+
+        <motion.section
+          id="reviews"
+          className="mt-16 border-t border-gray-200/90 pt-14 lg:mt-20 lg:pt-16"
+          initial={{ opacity: 0, y: 16 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-50px" }}
+          transition={{ duration: 0.45, ease: easeOut }}
+        >
+          <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+            <div>
+              <h2 className="text-2xl font-bold tracking-tight text-gray-900 sm:text-3xl">
+                Customer reviews
+              </h2>
+              <p className="mt-1 text-sm text-gray-600">
+                Verified buyers on this product.
+              </p>
+            </div>
+            <div className="flex items-center gap-3 rounded-xl bg-white px-4 py-3 ring-1 ring-gray-200/90">
+              <span className="text-3xl font-bold tabular-nums text-gray-900">
+                {product.rating}
+              </span>
+              <div>
+                <StarRow rating={product.rating} />
+                <p className="mt-0.5 text-xs text-gray-500">
+                  Based on {product.reviewCount} reviews
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <ul className="mt-10 grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
+            {product.reviews.map((r, i) => (
+              <motion.li
+                key={`${r.author}-${i}`}
+                initial={{ opacity: 0, y: 14 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{
+                  duration: 0.4,
+                  delay: reduceMotion ? 0 : i * 0.07,
+                  ease: easeOut,
+                }}
+                className="rounded-xl bg-white p-5 shadow-sm ring-1 ring-gray-200/85"
+              >
+                <div className="flex items-center justify-between gap-2">
+                  <span className="font-semibold text-gray-900">{r.author}</span>
+                  <StarRow rating={r.rating} size="sm" />
+                </div>
+                <p className="mt-3 text-sm leading-relaxed text-gray-600">
+                  “{r.text}”
+                </p>
+              </motion.li>
+            ))}
+          </ul>
+        </motion.section>
+      </div>
+
+      {/* Sticky mobile CTA */}
+      <div className="fixed bottom-0 left-0 right-0 z-40 border-t border-gray-200/90 bg-white/98 p-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] shadow-[0_-8px_32px_rgba(0,0,0,0.08)] backdrop-blur-md lg:hidden">
+        <div className="mx-auto flex max-w-7xl items-center gap-3 px-1">
+          <div className="min-w-0 flex-1">
+            <p className="text-[11px] font-medium uppercase tracking-wide text-gray-400">
+              Price
+            </p>
+            <p className="truncate text-lg font-bold tabular-nums text-gray-900">
+              {product.price}
+            </p>
+          </div>
+          <motion.button
+            type="button"
+            onClick={handleBuyNow}
+            disabled={buyDisabled}
+            whileHover={{ scale: buyDisabled ? 1 : 1.02 }}
+            whileTap={{ scale: buyDisabled ? 1 : 0.98 }}
+            className="min-h-12 min-w-0 flex-1 rounded-xl bg-gray-900 px-4 text-sm font-semibold text-white shadow-md transition-colors hover:bg-black disabled:opacity-70"
+          >
+            Buy now — WhatsApp
+          </motion.button>
+        </div>
+      </div>
+    </motion.div>
+  );
+}
+
+function PurchasePanel({
+  product,
+  quantity,
+  setQuantity,
+  onAddToCart,
+  onBuyNow,
+  addedToCart,
+  addDisabled,
+  buyDisabled,
+  lowStock,
+  compactTrust,
+}: {
+  product: Product;
+  quantity: number;
+  setQuantity: (n: number) => void;
+  onAddToCart: () => void;
+  onBuyNow: () => void;
+  addedToCart: boolean;
+  addDisabled: boolean;
+  buyDisabled: boolean;
+  lowStock: number | null | undefined;
+  compactTrust?: boolean;
+}) {
+  return (
+    <div className="space-y-5">
+      <p className="hidden text-3xl font-bold tabular-nums text-gray-900 lg:block">
+        {product.price}
+      </p>
+
+      <div className="space-y-2 text-sm">
+        <p className="flex items-center gap-2 font-medium text-emerald-700">
+          <span className="inline-block h-2 w-2 shrink-0 rounded-full bg-emerald-500" />
+          In stock
+        </p>
+        <p className="flex items-start gap-2 text-gray-600">
+          <Truck className="mt-0.5 h-4 w-4 shrink-0 text-gray-400" strokeWidth={2} />
+          Free delivery in 3–5 days
+        </p>
+        {lowStock != null ? (
+          <p className="flex items-center gap-2 font-medium text-amber-800">
+            <Package className="h-4 w-4 shrink-0" strokeWidth={2} />
+            Only {lowStock} left in stock
+          </p>
+        ) : null}
+      </div>
+
+      <div>
+        <label htmlFor="qty" className="text-xs font-semibold uppercase tracking-wide text-gray-500">
+          Quantity
+        </label>
+        <div className="mt-2 flex items-center gap-2">
+          <button
+            type="button"
+            aria-label="Decrease quantity"
+            onClick={() => setQuantity(Math.max(1, quantity - 1))}
+            className="flex h-10 w-10 items-center justify-center rounded-lg border border-gray-200 bg-white text-lg font-medium text-gray-700 transition-colors hover:bg-gray-50"
+          >
+            −
+          </button>
+          <input
+            id="qty"
+            readOnly
+            value={quantity}
+            className="h-10 w-14 rounded-lg border border-gray-200 bg-gray-50 text-center text-sm font-semibold tabular-nums text-gray-900"
+          />
+          <button
+            type="button"
+            aria-label="Increase quantity"
+            onClick={() => setQuantity(Math.min(9, quantity + 1))}
+            className="flex h-10 w-10 items-center justify-center rounded-lg border border-gray-200 bg-white text-lg font-medium text-gray-700 transition-colors hover:bg-gray-50"
+          >
+            +
+          </button>
+        </div>
+      </div>
+
+      <div className="flex flex-col gap-3">
+        <motion.button
+          type="button"
+          onClick={onBuyNow}
+          disabled={buyDisabled}
+          whileHover={{ scale: buyDisabled ? 1 : 1.02 }}
+          whileTap={{ scale: buyDisabled ? 1 : 0.98 }}
+          transition={{ duration: 0.2, ease: easeOut }}
+          className="flex min-h-[3.25rem] w-full items-center justify-center rounded-xl bg-gray-900 py-3.5 text-base font-semibold text-white shadow-md transition-colors hover:bg-black disabled:opacity-75"
+        >
+          Buy now — WhatsApp
+        </motion.button>
+        <motion.button
+          type="button"
+          onClick={onAddToCart}
+          disabled={addDisabled}
+          whileHover={{ scale: addDisabled ? 1 : 1.02 }}
+          whileTap={{ scale: addDisabled ? 1 : 0.98 }}
+          transition={{ duration: 0.2, ease: easeOut }}
+          className="flex min-h-11 w-full items-center justify-center rounded-xl border-2 border-gray-200 bg-white py-3 text-sm font-semibold text-gray-900 transition-colors hover:border-gray-300 hover:bg-gray-50 disabled:opacity-70"
+        >
+          {addedToCart ? (
+            <motion.span
+              className="flex items-center gap-2"
+              initial={{ opacity: 0, y: 4 }}
+              animate={{ opacity: 1, y: 0 }}
+            >
+              <Check className="h-4 w-4 text-emerald-600" strokeWidth={2.5} />
+              Added to cart ✅
+            </motion.span>
+          ) : (
+            "Add to cart"
+          )}
+        </motion.button>
+      </div>
+
+      {!compactTrust ? (
+        <div className="space-y-2 border-t border-gray-100 pt-4 text-xs text-gray-500">
+          <p className="flex items-center gap-2">
+            <ShieldCheck className="h-4 w-4 text-gray-400" strokeWidth={2} />
+            Order via WhatsApp — secure & direct
+          </p>
+          <p className="flex items-center gap-2">
+            <RotateCcw className="h-4 w-4 text-gray-400" strokeWidth={2} />
+            Easy returns — 30-day guarantee
+          </p>
+        </div>
+      ) : (
+        <p className="text-center text-[11px] text-gray-500">
+          WhatsApp order · Easy returns
+        </p>
+      )}
+    </div>
+  );
+}
