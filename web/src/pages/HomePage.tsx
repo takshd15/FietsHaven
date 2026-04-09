@@ -133,7 +133,7 @@ export function HomePage() {
             <img
               src={bikesSectionBackdrop}
               alt=""
-              className="h-full w-full object-cover object-[64%_42%] sm:object-[58%_45%] lg:object-center"
+              className="h-full w-full object-cover object-[66%_44%] sm:object-[60%_46%] lg:object-center"
               loading="eager"
               decoding="async"
             />
