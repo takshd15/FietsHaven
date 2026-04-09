@@ -7,7 +7,6 @@ import { publicAsset } from "../lib/publicAsset.ts";
 const easeOut = "easeOut" as const;
 
 const heroBikeSlides = [
-  { src: publicAsset("hero/v20-pro.jpeg"), alt: "Elektrische fiets v20 Pro" },
   { src: publicAsset("hero/dubbele-accu.jpeg"), alt: "Elektrische fiets met dubbele accu" },
   { src: publicAsset("hero/mini.jpeg"), alt: "Elektrische fiets Mini" },
 ] as const;
@@ -49,9 +48,9 @@ const heroButton = {
 };
 
 const btnPrimary =
-  "inline-flex min-h-12 w-full min-w-0 items-center justify-center rounded-2xl bg-white px-6 text-[15px] font-semibold text-[#4a5260] shadow-md transition-all active:scale-[0.98] hover:bg-white/90 sm:min-h-11 sm:w-auto sm:px-7 sm:text-sm sm:shadow-sm sm:hover:scale-[1.01]";
+  "inline-flex min-h-11 items-center justify-center rounded-2xl bg-white px-7 text-sm font-semibold text-[#4a5260] shadow-sm transition-all hover:scale-[1.01] hover:bg-white/90";
 const btnSecondary =
-  "inline-flex min-h-12 w-full min-w-0 items-center justify-center rounded-2xl border-2 border-white/70 bg-white/95 px-6 text-[15px] font-semibold text-[#4a5260] shadow-md transition-all active:scale-[0.98] hover:bg-white sm:min-h-11 sm:w-auto sm:border-white/60 sm:px-7 sm:text-sm sm:shadow-sm sm:hover:scale-[1.01]";
+  "inline-flex min-h-11 items-center justify-center rounded-2xl border border-white/60 bg-white px-7 text-sm font-semibold text-[#4a5260] shadow-sm transition-all hover:scale-[1.01] hover:bg-white/90";
 
 const SLIDE_INTERVAL_MS = 2500;
 
@@ -192,20 +191,16 @@ function HeroImage() {
 
 export function Hero() {
   return (
-    <section
-      id="home"
-      className="px-[max(1rem,env(safe-area-inset-left))] pb-10 pt-[max(1.5rem,env(safe-area-inset-top))] pr-[max(1rem,env(safe-area-inset-right))] sm:px-6 sm:pb-12 sm:pt-8 lg:px-8 lg:pb-16 lg:pt-10"
-    >
-      <div className="mx-auto max-w-7xl overflow-hidden rounded-2xl bg-gradient-to-br from-[#7a8494]/95 via-[#6d7784]/95 to-[#5c6370]/95 shadow-lg ring-1 ring-white/20 backdrop-blur-[2px] sm:rounded-3xl sm:from-[#7a8494] sm:via-[#6d7784] sm:to-[#5c6370] sm:ring-white/15 sm:backdrop-blur-none">
+    <section id="home" className="px-4 pb-12 pt-8 sm:px-6 lg:px-8 lg:pb-16 lg:pt-10">
+      <div className="mx-auto max-w-7xl overflow-hidden rounded-2xl bg-gradient-to-br from-[#7a8494] via-[#6d7784] to-[#5c6370] shadow-lg ring-1 ring-white/15 sm:rounded-3xl">
         <div className="grid gap-0 lg:grid-cols-[1fr_1.05fr] lg:items-stretch">
-          {/* Mobiel: eerst kop + knoppen, daarna beeld — betere lees- en tikvolgorde */}
-          <div className="order-1 flex flex-col justify-center px-5 py-8 sm:px-10 sm:py-12 lg:order-1 lg:py-16 lg:pl-12 lg:pr-6 xl:pl-14">
-            <div className="mx-auto w-full max-w-xl text-center sm:mx-0 sm:text-left">
+          <div className="order-2 flex flex-col justify-center px-6 py-10 sm:px-10 sm:py-12 lg:order-1 lg:py-16 lg:pl-12 lg:pr-6 xl:pl-14">
+            <div className="max-w-xl">
               <motion.h1
                 variants={heroHeading}
                 initial="hidden"
                 animate="visible"
-                className="text-[1.65rem] font-bold leading-[1.1] tracking-tight text-white sm:text-3xl sm:leading-[1.08] md:text-4xl lg:text-5xl xl:text-[3.25rem]"
+                className="text-3xl font-bold leading-[1.08] tracking-tight text-white sm:text-4xl lg:text-5xl xl:text-[3.25rem]"
               >
                 Ontdek jouw perfecte rit
               </motion.h1>
@@ -213,14 +208,14 @@ export function Hero() {
                 variants={heroSub}
                 initial="hidden"
                 animate="visible"
-                className="mt-3 text-[15px] font-normal leading-relaxed text-white/85 sm:mt-4 sm:text-lg sm:text-white/75"
+                className="mt-4 text-base font-normal leading-relaxed text-white/75 sm:text-lg"
               >
                 Ontdek onze collectie van hoogwaardige fietsen.
               </motion.p>
             </div>
 
             <motion.div
-              className="mx-auto mt-6 flex w-full max-w-md flex-col gap-3 sm:mx-0 sm:mt-8 sm:max-w-none sm:flex-row sm:flex-wrap sm:gap-4"
+              className="mt-8 flex flex-wrap gap-3 sm:gap-4"
               variants={heroButtonsContainer}
               initial="hidden"
               animate="visible"
@@ -252,7 +247,7 @@ export function Hero() {
             </motion.div>
           </div>
 
-          <div className="order-2 flex min-h-0 w-full flex-col lg:order-2 lg:h-full lg:min-h-0">
+          <div className="order-1 flex min-h-0 w-full flex-col lg:order-2 lg:h-full lg:min-h-0">
             <HeroImage />
           </div>
         </div>

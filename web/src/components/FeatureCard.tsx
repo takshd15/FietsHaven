@@ -16,14 +16,14 @@ export function FeatureCard({
 }: FeatureCardProps) {
   return (
     <motion.div variants={variants}>
-      <div className="flex flex-col items-center px-1 text-center sm:items-start sm:px-0 sm:text-left">
-        <div className="mb-3 flex h-14 w-14 items-center justify-center rounded-full border border-gray-300 bg-white text-gray-900 sm:mb-4 sm:h-12 sm:w-12">
-          <Icon className="h-7 w-7 sm:h-6 sm:w-6" strokeWidth={1.25} />
+      <div className="flex flex-col items-center text-center sm:items-start sm:text-left">
+        <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-full border border-gray-300 bg-white text-gray-900">
+          <Icon className="h-6 w-6" strokeWidth={1.25} />
         </div>
-        <h3 className="text-[13px] font-bold uppercase tracking-wide text-gray-900 sm:text-sm">
+        <h3 className="text-sm font-bold uppercase tracking-wide text-gray-900">
           {title}
         </h3>
-        <p className="mt-2 max-w-xs text-[15px] leading-relaxed text-gray-600 sm:text-sm">
+        <p className="mt-2 max-w-xs text-sm leading-relaxed text-gray-600">
           {description}
         </p>
       </div>

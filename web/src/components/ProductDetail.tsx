@@ -165,7 +165,7 @@ export function ProductDetail({ product }: ProductDetailProps) {
         >
           <Link
             to="/"
-            className="inline-flex items-center gap-2 text-sm font-medium text-white/70 transition-colors hover:text-white"
+            className="inline-flex items-center gap-2 text-sm font-medium text-gray-600 transition-colors hover:text-gray-900"
           >
             <ArrowLeft className="h-4 w-4" strokeWidth={2} />
             Terug naar shop
@@ -203,17 +203,17 @@ export function ProductDetail({ product }: ProductDetailProps) {
                   Bestseller
                 </span>
               ) : null}
-              <span className="inline-flex items-center gap-1 rounded-full border border-white/20 bg-white/10 px-2.5 py-1 text-xs font-medium text-white/80">
+              <span className="inline-flex items-center gap-1 rounded-full border border-gray-200 bg-gray-50 px-2.5 py-1 text-xs font-medium text-gray-700">
                 <ShieldCheck className="h-3.5 w-3.5" strokeWidth={2} />
                 30 dagen retour · 2 jaar garantie
               </span>
             </motion.div>
 
             <motion.div variants={detailItem}>
-              <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-white/50">
+              <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-gray-500">
                 Fietshaven
               </p>
-              <h1 className="mt-2 text-2xl font-bold tracking-tight text-white sm:text-3xl lg:text-[1.75rem] lg:leading-tight">
+              <h1 className="mt-2 text-2xl font-bold tracking-tight text-gray-900 sm:text-3xl lg:text-[1.75rem] lg:leading-tight">
                 {product.title}
               </h1>
             </motion.div>
@@ -221,13 +221,13 @@ export function ProductDetail({ product }: ProductDetailProps) {
             <motion.div variants={detailItem}>
               <a
                 href="#reviews"
-                className="inline-flex flex-wrap items-center gap-2 text-sm text-white/70 transition-colors hover:text-white"
+                className="inline-flex flex-wrap items-center gap-2 text-sm text-gray-600 transition-colors hover:text-gray-900"
               >
                 <StarRow rating={product.rating} />
-                <span className="font-semibold text-white">
+                <span className="font-semibold text-gray-900">
                   {product.rating}/5
                 </span>
-                <span className="text-white/55">
+                <span className="text-gray-500">
                   ({product.reviewCount} beoordelingen)
                 </span>
               </a>
@@ -235,16 +235,16 @@ export function ProductDetail({ product }: ProductDetailProps) {
 
             <motion.p
               variants={detailItem}
-              className="text-base leading-relaxed text-white/75 sm:text-[17px]"
+              className="text-base leading-relaxed text-gray-700 sm:text-[17px]"
             >
               {product.description}
             </motion.p>
 
             <motion.div variants={detailItem}>
-              <h2 className="text-sm font-bold uppercase tracking-widest text-white/60">Inclusief</h2>
+              <h2 className="text-sm font-bold uppercase tracking-widest text-gray-600">Inclusief</h2>
               <ul className="mt-3 space-y-2.5">
                 {product.features.map((line) => (
-                  <li key={line} className="flex gap-3 text-sm text-white/80">
+                  <li key={line} className="flex gap-3 text-sm text-gray-700">
                     <Check
                       className="mt-0.5 h-4 w-4 shrink-0 text-emerald-400"
                       strokeWidth={2.5}
@@ -257,30 +257,30 @@ export function ProductDetail({ product }: ProductDetailProps) {
 
             {hasSpecsSection ? (
               <motion.div variants={detailItem}>
-                <details className="group overflow-hidden rounded-2xl border border-white/15" style={{ backgroundColor: "var(--fh-surface-lo)" }}>
-                  <summary className="flex cursor-pointer list-none select-none items-center justify-between gap-3 px-4 py-4 text-sm font-bold uppercase tracking-widest text-white/80 marker:content-none hover:bg-white/8 [&::-webkit-details-marker]:hidden">
+                <details className="group overflow-hidden rounded-2xl border border-gray-200" style={{ backgroundColor: "var(--fh-surface-lo)" }}>
+                  <summary className="flex cursor-pointer list-none select-none items-center justify-between gap-3 px-4 py-4 text-sm font-bold uppercase tracking-widest text-gray-700 marker:content-none hover:bg-gray-50 [&::-webkit-details-marker]:hidden">
                     Product specificaties
                     <ChevronDown
-                      className="h-5 w-5 shrink-0 text-white/50 transition-transform group-open:rotate-180"
+                      className="h-5 w-5 shrink-0 text-gray-500 transition-transform group-open:rotate-180"
                       strokeWidth={2}
                     />
                   </summary>
-                  <div className="border-t border-white/10 px-4 pb-4 pt-3">
+                  <div className="border-t border-gray-200 px-4 pb-4 pt-3">
                     {specIntro ? (
-                      <p className="text-sm leading-relaxed text-white/70">{specIntro}</p>
+                      <p className="text-sm leading-relaxed text-gray-700">{specIntro}</p>
                     ) : null}
                     {specs.length > 0 ? (
-                      <ul className="mt-3 space-y-2 text-sm text-white/80">
+                      <ul className="mt-3 space-y-2 text-sm text-gray-700">
                         {specs.map((spec) => (
                           <li key={spec} className="flex items-start gap-2">
-                            <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-white/55" />
+                            <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-gray-500" />
                             <span>{spec}</span>
                           </li>
                         ))}
                       </ul>
                     ) : null}
                     {!specIntro && specs.length === 0 && moreDetails ? (
-                      <p className="text-sm leading-relaxed text-white/70">{moreDetails}</p>
+                      <p className="text-sm leading-relaxed text-gray-700">{moreDetails}</p>
                     ) : null}
                   </div>
                 </details>
@@ -295,7 +295,7 @@ export function ProductDetail({ product }: ProductDetailProps) {
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.5, ease: easeOut, delay: reduceMotion ? 0 : 0.08 }}
           >
-            <div className="sticky top-24 rounded-3xl border border-white/15 p-6 shadow-md" style={{ backgroundColor: "var(--fh-surface)" }}>
+            <div className="sticky top-24 rounded-3xl border border-gray-200 p-6 shadow-md" style={{ backgroundColor: "var(--fh-surface)" }}>
               <PurchasePanel
                 product={product}
                 quantity={quantity}
@@ -312,7 +312,7 @@ export function ProductDetail({ product }: ProductDetailProps) {
 
           {/* Purchase card — mobile (in flow) */}
           <div className="lg:col-span-12 lg:hidden">
-            <div className="rounded-3xl border border-white/15 p-6 shadow-md" style={{ backgroundColor: "var(--fh-surface)" }}>
+            <div className="rounded-3xl border border-gray-200 p-6 shadow-md" style={{ backgroundColor: "var(--fh-surface)" }}>
               <PurchasePanel
                 product={product}
                 quantity={quantity}
@@ -331,7 +331,7 @@ export function ProductDetail({ product }: ProductDetailProps) {
 
         <motion.section
           id="reviews"
-          className="mt-16 border-t border-white/15 pt-14 lg:mt-20 lg:pt-16"
+          className="mt-16 border-t border-gray-200 pt-14 lg:mt-20 lg:pt-16"
           initial={{ opacity: 0, y: 16 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-50px" }}
@@ -339,20 +339,20 @@ export function ProductDetail({ product }: ProductDetailProps) {
         >
           <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
             <div>
-              <h2 className="text-2xl font-bold tracking-tight text-white sm:text-3xl">
+              <h2 className="text-2xl font-bold tracking-tight text-gray-900 sm:text-3xl">
                 Beoordelingen
               </h2>
-              <p className="mt-1 text-sm text-white/60">
+              <p className="mt-1 text-sm text-gray-600">
                 Van gekochte klanten.
               </p>
             </div>
-            <div className="flex items-center gap-3 rounded-2xl border border-white/15 px-4 py-3" style={{ backgroundColor: "var(--fh-surface)" }}>
-              <span className="text-3xl font-bold tabular-nums text-white">
+            <div className="flex items-center gap-3 rounded-2xl border border-gray-200 px-4 py-3" style={{ backgroundColor: "var(--fh-surface)" }}>
+              <span className="text-3xl font-bold tabular-nums text-gray-900">
                 {product.rating}
               </span>
               <div>
                 <StarRow rating={product.rating} />
-                <p className="mt-0.5 text-xs text-white/55">
+                <p className="mt-0.5 text-xs text-gray-500">
                   Op basis van {product.reviewCount} beoordelingen
                 </p>
               </div>
@@ -371,13 +371,13 @@ export function ProductDetail({ product }: ProductDetailProps) {
                   delay: reduceMotion ? 0 : i * 0.07,
                   ease: easeOut,
                 }}
-                className="rounded-3xl border border-white/12 p-5 shadow-sm" style={{ backgroundColor: "var(--fh-surface)" } as React.CSSProperties}
+                className="rounded-3xl border border-gray-200 p-5 shadow-sm" style={{ backgroundColor: "var(--fh-surface)" } as React.CSSProperties}
               >
                 <div className="flex items-center justify-between gap-2">
-                  <span className="font-semibold text-white">{r.author}</span>
+                  <span className="font-semibold text-gray-900">{r.author}</span>
                   <StarRow rating={r.rating} size="sm" />
                 </div>
-                <p className="mt-3 text-sm leading-relaxed text-white/70">
+                <p className="mt-3 text-sm leading-relaxed text-gray-700">
                   “{r.text}”
                 </p>
               </motion.li>
@@ -387,14 +387,14 @@ export function ProductDetail({ product }: ProductDetailProps) {
       </div>
 
       {/* Sticky mobile CTA */}
-      <div className="fixed bottom-0 left-0 right-0 z-40 border-t border-white/10 p-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] shadow-[0_-8px_32px_rgba(0,0,0,0.25)] backdrop-blur-md lg:hidden" style={{ backgroundColor: "var(--fh-surface-lo)" }}>
+      <div className="fixed bottom-0 left-0 right-0 z-40 border-t border-gray-200 p-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] shadow-[0_-8px_24px_rgba(15,23,42,0.12)] backdrop-blur-md lg:hidden" style={{ backgroundColor: "var(--fh-surface-lo)" }}>
         <div className="mx-auto max-w-7xl px-1">
           <div className="flex items-center gap-3">
             <div className="min-w-0 flex-1">
-              <p className="text-[11px] font-medium uppercase tracking-wide text-white/50">
+              <p className="text-[11px] font-medium uppercase tracking-wide text-gray-500">
                 Prijs
               </p>
-              <p className="truncate text-lg font-bold tabular-nums text-white">
+              <p className="truncate text-lg font-bold tabular-nums text-gray-900">
                 {product.price}
               </p>
             </div>
@@ -416,7 +416,7 @@ export function ProductDetail({ product }: ProductDetailProps) {
             whileHover={{ scale: addDisabled ? 1 : 1.01 }}
             whileTap={{ scale: addDisabled ? 1 : 0.98 }}
             transition={{ duration: 0.2, ease: easeOut }}
-            className="mt-2 flex min-h-11 w-full items-center justify-center rounded-2xl border-2 border-white/25 bg-white/10 py-3 text-sm font-semibold text-white transition-all hover:bg-white/20 disabled:opacity-70"
+            className="mt-2 flex min-h-11 w-full items-center justify-center rounded-2xl border border-gray-300 bg-white py-3 text-sm font-semibold text-gray-900 transition-all hover:bg-gray-50 disabled:opacity-70"
           >
             {addedToCart ? (
               <motion.span
@@ -462,7 +462,7 @@ function PurchasePanel({
 }) {
   return (
     <div className="space-y-5">
-      <p className="hidden text-3xl font-bold tabular-nums text-white lg:block">
+      <p className="hidden text-3xl font-bold tabular-nums text-gray-900 lg:block">
         {product.price}
       </p>
 
@@ -471,8 +471,8 @@ function PurchasePanel({
           <span className="inline-block h-2 w-2 shrink-0 rounded-full bg-emerald-400" />
           Op voorraad
         </p>
-        <p className="flex items-start gap-2 text-white/70">
-          <Truck className="mt-0.5 h-4 w-4 shrink-0 text-white/40" strokeWidth={2} />
+        <p className="flex items-start gap-2 text-gray-700">
+          <Truck className="mt-0.5 h-4 w-4 shrink-0 text-gray-500" strokeWidth={2} />
           Gratis levering binnen 3–5 dagen
         </p>
         {lowStock != null ? (
@@ -484,7 +484,7 @@ function PurchasePanel({
       </div>
 
       <div>
-        <label htmlFor="qty" className="text-xs font-semibold uppercase tracking-wide text-white/55">
+        <label htmlFor="qty" className="text-xs font-semibold uppercase tracking-wide text-gray-500">
           Aantal
         </label>
         <div className="mt-2 flex items-center gap-2">
@@ -492,7 +492,7 @@ function PurchasePanel({
             type="button"
             aria-label="Aantal verlagen"
             onClick={() => setQuantity(Math.max(1, quantity - 1))}
-            className="flex h-10 w-10 items-center justify-center rounded-2xl border border-white/20 bg-white/10 text-lg font-medium text-white transition-colors hover:bg-white/20"
+            className="flex h-10 w-10 items-center justify-center rounded-2xl border border-gray-300 bg-white text-lg font-medium text-gray-900 transition-colors hover:bg-gray-50"
           >
             −
           </button>
@@ -500,13 +500,13 @@ function PurchasePanel({
             id="qty"
             readOnly
             value={quantity}
-            className="h-10 w-14 rounded-2xl border border-white/20 bg-white/10 text-center text-sm font-semibold tabular-nums text-white"
+            className="h-10 w-14 rounded-2xl border border-gray-300 bg-white text-center text-sm font-semibold tabular-nums text-gray-900"
           />
           <button
             type="button"
             aria-label="Aantal verhogen"
             onClick={() => setQuantity(Math.min(9, quantity + 1))}
-            className="flex h-10 w-10 items-center justify-center rounded-2xl border border-white/20 bg-white/10 text-lg font-medium text-white transition-colors hover:bg-white/20"
+            className="flex h-10 w-10 items-center justify-center rounded-2xl border border-gray-300 bg-white text-lg font-medium text-gray-900 transition-colors hover:bg-gray-50"
           >
             +
           </button>
@@ -532,7 +532,7 @@ function PurchasePanel({
           whileHover={{ scale: addDisabled ? 1 : 1.02 }}
           whileTap={{ scale: addDisabled ? 1 : 0.98 }}
           transition={{ duration: 0.2, ease: easeOut }}
-          className="flex min-h-11 w-full items-center justify-center rounded-2xl border-2 border-white/25 bg-white/10 py-3 text-sm font-semibold text-white transition-all hover:bg-white/20 disabled:opacity-70"
+          className="flex min-h-11 w-full items-center justify-center rounded-2xl border border-gray-300 bg-white py-3 text-sm font-semibold text-gray-900 transition-all hover:bg-gray-50 disabled:opacity-70"
         >
           {addedToCart ? (
             <motion.span
@@ -550,18 +550,18 @@ function PurchasePanel({
       </div>
 
       {!compactTrust ? (
-        <div className="space-y-2 border-t border-white/15 pt-4 text-xs text-white/55">
+        <div className="space-y-2 border-t border-gray-200 pt-4 text-xs text-gray-600">
           <p className="flex items-center gap-2">
-            <ShieldCheck className="h-4 w-4 text-white/35" strokeWidth={2} />
+            <ShieldCheck className="h-4 w-4 text-gray-500" strokeWidth={2} />
             Bestellen via WhatsApp — veilig en direct
           </p>
           <p className="flex items-center gap-2">
-            <RotateCcw className="h-4 w-4 text-white/35" strokeWidth={2} />
+            <RotateCcw className="h-4 w-4 text-gray-500" strokeWidth={2} />
             Eenvoudig retour — 30 dagen garantie
           </p>
         </div>
       ) : (
-        <p className="text-center text-[11px] text-white/50">
+        <p className="text-center text-[11px] text-gray-500">
           WhatsApp-bestelling · Eenvoudig retour
         </p>
       )}

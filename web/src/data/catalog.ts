@@ -30,17 +30,17 @@ export type Product = {
   lowStockCount?: number | null;
 };
 
-/** Gedeelde accessoire-foto’s (merk, frame tas, afstandsbediening) bij alle drie fietsmodellen */
+/** Gedeelde galerijvolgorde bij fietsmodellen: fiets -> 2 accessoires -> logo */
 const bikeAccessoryImages = [
-  publicAsset("bike-accessories/accessoire-1.jpeg"),
   publicAsset("bike-accessories/accessoire-2.jpeg"),
   publicAsset("bike-accessories/accessoire-3.jpeg"),
+  publicAsset("bike-accessories/logo-product2.jpeg"),
 ];
 
 const bikeAccessoryAlts = [
-  "Fietshaven — merkbeeld",
   "Frame tas met telefoonhouder",
   "Slimme afstandsbediening",
+  "Fietshaven logo",
 ] as const;
 
 export const products: Product[] = [

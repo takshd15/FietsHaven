@@ -6,7 +6,6 @@ import { BikeShowcaseCarousel } from "../components/BikeShowcaseCarousel.tsx";
 import { Hero } from "../components/Hero.tsx";
 import { FeatureCard } from "../components/FeatureCard.tsx";
 import { products } from "../data/catalog.ts";
-import { publicAsset } from "../lib/publicAsset.ts";
 
 const easeOut = "easeOut" as const;
 
@@ -30,7 +29,7 @@ const staggerItem: Variants = {
   },
 };
 
-const showcaseSlugs = ["v20-pro", "dubbele-accu", "e-bike-mini"] as const;
+const showcaseSlugs = ["dubbele-accu", "e-bike-mini"] as const;
 
 const bikesShowcase = showcaseSlugs
   .map((slug) => products.find((p) => p.slug === slug))
@@ -52,14 +51,10 @@ const accessoryCards = [
 ] as const;
 
 const btnPrimary =
-  "inline-flex min-h-12 w-full items-center justify-center rounded-2xl bg-white px-6 text-[15px] font-semibold text-[#4a5260] shadow-md transition-all active:scale-[0.98] hover:bg-white/90 sm:min-h-11 sm:w-auto sm:px-8 sm:text-sm sm:shadow-sm sm:hover:scale-[1.01]";
+  "inline-flex min-h-11 items-center justify-center rounded-2xl bg-white px-8 text-sm font-semibold text-[#4a5260] shadow-sm transition-all hover:scale-[1.01] hover:bg-white/90";
 
 const btnSecondary =
-  "inline-flex min-h-12 w-full items-center justify-center rounded-2xl border-2 border-white/35 bg-white/12 px-4 py-3 text-[15px] font-semibold text-white transition-colors active:scale-[0.98] hover:bg-white/20 sm:min-h-10 sm:border sm:py-2.5 sm:text-sm";
-
-/** Portret op mobiel, actie-landschap op tablet+ — volle kleur, geen filters */
-const heroBgMobile = publicAsset("home/hero-mobile.png");
-const heroBgDesktop = publicAsset("home/hero-desktop.png");
+  "inline-flex min-h-10 w-full items-center justify-center rounded-2xl border border-gray-300 bg-white px-4 py-2.5 text-sm font-semibold text-gray-900 transition-colors hover:bg-gray-50";
 
 export function HomePage() {
   const location = useLocation();
@@ -80,39 +75,25 @@ export function HomePage() {
 
   return (
     <motion.div
-      className="relative min-h-screen overflow-hidden"
+      className="min-h-screen"
       style={{ backgroundColor: "var(--fh-bg)" }}
       initial={{ opacity: 0, y: 12 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.45, ease: easeOut }}
     >
-      <div className="pointer-events-none absolute inset-0 min-h-full">
-        <picture className="absolute inset-0 block h-full w-full">
-          <source media="(max-width: 767px)" srcSet={heroBgMobile} />
-          <img
-            src={heroBgDesktop}
-            alt=""
-            aria-hidden="true"
-            className="h-full w-full object-cover object-[52%_36%] md:object-[32%_52%] lg:object-[28%_50%]"
-            loading="eager"
-            decoding="async"
-            fetchPriority="high"
-          />
-        </picture>
-      </div>
-      <main className="relative z-10 pb-[max(0.75rem,env(safe-area-inset-bottom))]">
+      <main>
         <Hero />
 
         {/* Trust bar */}
         <section
           id="values"
           ref={featuresRef}
-          className={`border-y border-white/10 ${sectionPadX} py-10 sm:py-14 lg:py-16`}
+          className={`border-y border-white/10 ${sectionPadX} py-12 sm:py-14 lg:py-16`}
           style={{ backgroundColor: "var(--fh-surface-lo)" }}
         >
           <div className={container}>
             <motion.div
-              className="grid gap-8 sm:gap-8 md:grid-cols-3 md:gap-10 lg:gap-16"
+              className="grid gap-10 sm:gap-8 md:grid-cols-3 md:gap-10 lg:gap-16"
               variants={staggerContainer}
               initial="hidden"
               animate={featuresInView ? "show" : "hidden"}
@@ -143,11 +124,11 @@ export function HomePage() {
         <section
           id="bikes"
           ref={bikesRef}
-          className={`${sectionPadX} py-12 sm:py-16 lg:py-20`}
+          className={`${sectionPadX} py-14 sm:py-16 lg:py-20`}
         >
           <div className={container}>
             <motion.h2
-              className="text-center text-[1.375rem] font-bold leading-snug tracking-tight text-white sm:text-2xl md:text-3xl"
+              className="text-center text-2xl font-bold tracking-tight text-gray-900 sm:text-3xl"
               initial={{ opacity: 0, y: 12 }}
               animate={bikesInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 12 }}
               transition={{ duration: 0.45, ease: easeOut }}
@@ -164,7 +145,7 @@ export function HomePage() {
               {bikesShowcase.map((bike) => (
                 <motion.li key={bike.slug} variants={staggerItem}>
                   <article
-                    className="flex h-full flex-col rounded-3xl p-1.5 ring-1 ring-white/15 sm:p-2"
+                    className="flex h-full flex-col rounded-3xl p-1.5 ring-1 ring-gray-200 sm:p-2"
                     style={{ backgroundColor: "var(--fh-surface)" }}
                   >
                     <div className="overflow-hidden rounded-2xl">
@@ -180,27 +161,27 @@ export function HomePage() {
                       {/* Title + price */}
                       <Link
                         to={`/product/${bike.slug}`}
-                        className="text-base font-bold leading-snug text-white hover:underline hover:decoration-white/50"
+                        className="text-base font-bold leading-snug text-gray-900 hover:underline hover:decoration-gray-400"
                       >
                         {bike.title}
                       </Link>
-                      <p className="mt-1 text-sm font-semibold tabular-nums text-white/75">
+                      <p className="mt-1 text-sm font-semibold tabular-nums text-gray-700">
                         {bike.price}
                       </p>
 
                       {/* Inclusief collapsible */}
-                      <details className="group mt-4 overflow-hidden rounded-2xl border border-white/15">
-                        <summary className="flex cursor-pointer list-none select-none items-center justify-between px-4 py-3 text-xs font-bold uppercase tracking-widest text-white/90 marker:content-none hover:bg-white/8 [&::-webkit-details-marker]:hidden">
+                      <details className="group mt-4 overflow-hidden rounded-2xl border border-gray-200">
+                        <summary className="flex cursor-pointer list-none select-none items-center justify-between px-4 py-3 text-xs font-bold uppercase tracking-widest text-gray-900 marker:content-none hover:bg-gray-50 [&::-webkit-details-marker]:hidden">
                           Inclusief
                           <ChevronDown
-                            className="h-4 w-4 shrink-0 text-white/60 transition-transform group-open:rotate-180"
+                            className="h-4 w-4 shrink-0 text-gray-500 transition-transform group-open:rotate-180"
                             strokeWidth={2}
                           />
                         </summary>
-                        <ul className="border-t border-white/10 px-4 pb-4 pt-3 space-y-1.5 text-sm text-white/75">
+                        <ul className="border-t border-gray-200 px-4 pb-4 pt-3 space-y-1.5 text-sm text-gray-700">
                           {bike.features.map((item) => (
                             <li key={item} className="flex items-center gap-2">
-                              <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-white/50" />
+                              <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-gray-500" />
                               {item}
                             </li>
                           ))}
@@ -226,7 +207,7 @@ export function HomePage() {
               animate={bikesInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 10 }}
               transition={{ duration: 0.4, delay: 0.15, ease: easeOut }}
             >
-              <Link to="/product/v20-pro" className={btnPrimary}>
+              <Link to="/product/dubbele-accu" className={btnPrimary}>
                 Bekijk alle modellen
               </Link>
             </motion.div>
@@ -237,12 +218,12 @@ export function HomePage() {
         <section
           id="accessories"
           ref={accessoriesRef}
-          className={`border-t border-white/10 ${sectionPadX} py-12 sm:py-16 lg:py-20`}
+          className={`border-t border-white/10 ${sectionPadX} py-14 sm:py-16 lg:py-20`}
           style={{ backgroundColor: "var(--fh-surface-lo)" }}
         >
           <div className={container}>
             <motion.h2
-              className="text-[1.375rem] font-bold leading-snug tracking-tight text-white sm:text-2xl md:text-3xl"
+              className="text-2xl font-bold tracking-tight text-gray-900 sm:text-3xl"
               initial={{ opacity: 0, y: 10 }}
               animate={accessoriesInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 10 }}
               transition={{ duration: 0.45, ease: easeOut }}
@@ -260,7 +241,7 @@ export function HomePage() {
                 <motion.article
                   key={item.slug}
                   variants={staggerItem}
-                  className="flex flex-col overflow-hidden rounded-3xl border border-white/15 shadow-sm"
+                  className="flex flex-col overflow-hidden rounded-3xl border border-gray-200 shadow-sm"
                   style={{ backgroundColor: "var(--fh-surface)" }}
                 >
                   <div className="flex h-36 items-center justify-center px-3 py-3 sm:h-40 md:h-44"
@@ -272,10 +253,10 @@ export function HomePage() {
                     />
                   </div>
                   <div className="flex flex-1 flex-col p-3 sm:p-4 md:p-5">
-                    <p className="text-sm font-bold text-white sm:text-base">{item.title}</p>
+                    <p className="text-sm font-bold text-gray-900 sm:text-base">{item.title}</p>
                     <Link
                       to={`/product/${item.slug}`}
-                      className={`${btnSecondary} mt-3 sm:mt-4`}
+                      className={`${btnSecondary} mt-3 text-sm sm:mt-4`}
                     >
                       Bekijk accessoires
                     </Link>

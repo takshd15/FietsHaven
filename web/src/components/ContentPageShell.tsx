@@ -23,14 +23,14 @@ export function ContentPageShell({ title, eyebrow, children }: ContentPageShellP
       <main className={`${sectionPadX} ${sectionY}`}>
         <article className="mx-auto max-w-3xl">
           {eyebrow ? (
-            <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-white/50">
+            <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-gray-500">
               {eyebrow}
             </p>
           ) : null}
-          <h1 className="mt-3 text-3xl font-bold tracking-tight text-white sm:text-4xl">
+          <h1 className="mt-3 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
             {title}
           </h1>
-          <div className="mt-10 space-y-6 text-base leading-relaxed text-white/75">
+          <div className="mt-10 space-y-6 text-base leading-relaxed text-gray-700">
             {children}
           </div>
         </article>

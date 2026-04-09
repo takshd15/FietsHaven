@@ -79,7 +79,7 @@ export function Footer() {
           <h2 className="text-lg font-bold tracking-tight text-white">
             Schrijf je in voor de nieuwsbrief
           </h2>
-          <p className="mt-3 text-sm leading-relaxed text-neutral-300">
+          <p className="mt-3 text-sm leading-relaxed text-white/75">
             Tips, nieuwe producten en aanbiedingen—compact in je inbox.
           </p>
           <form
@@ -109,12 +109,12 @@ export function Footer() {
 
         <div className="lg:col-span-3">
           <p className="text-sm font-semibold text-white">Bezoek ons</p>
-          <address className="mt-4 not-italic text-sm leading-relaxed text-neutral-300">
+          <address className="mt-4 not-italic text-sm leading-relaxed text-white/75">
             128 Canal Street
             <br />
             Amsterdam, NL 1013 KE
           </address>
-          <p className="mt-4 text-sm leading-relaxed text-neutral-300">
+          <p className="mt-4 text-sm leading-relaxed text-white/75">
             <span className="font-medium text-white">Openingstijden</span>
             <br />
             ma–za 10:00–18:00
@@ -124,14 +124,14 @@ export function Footer() {
           <p className="mt-4 text-sm">
             <a
               href="mailto:hello@fietshaven.com"
-              className="text-neutral-300 transition-colors hover:text-white"
+              className="text-white/75 transition-colors hover:text-white"
             >
               hello@fietshaven.com
             </a>
             <br />
             <a
               href="tel:+31201234567"
-              className="text-neutral-300 transition-colors hover:text-white"
+              className="text-white/75 transition-colors hover:text-white"
             >
               +31 20 123 4567
             </a>
@@ -140,7 +140,7 @@ export function Footer() {
 
         <div className="lg:col-span-2">
           <p className="text-sm font-semibold text-white">Snel naar</p>
-          <ul className="mt-4 flex flex-col gap-2.5 text-sm text-neutral-300">
+          <ul className="mt-4 flex flex-col gap-2.5 text-sm text-white/75">
             {quickLinks.map(({ label, to }) => (
               <li key={to}>
                 <Link to={to} className="transition-colors hover:text-white">
@@ -153,7 +153,7 @@ export function Footer() {
 
         <div className="lg:col-span-2">
           <p className="text-sm font-semibold text-white">Beleid</p>
-          <ul className="mt-4 flex flex-col gap-2.5 text-sm text-neutral-300">
+          <ul className="mt-4 flex flex-col gap-2.5 text-sm text-white/75">
             {policyLinks.map(({ label, to }) => (
               <li key={to}>
                 <Link to={to} className="transition-colors hover:text-white">
@@ -184,7 +184,7 @@ export function Footer() {
       </div>
 
       <div className="mx-auto mt-12 max-w-7xl border-t border-neutral-700 pt-8">
-        <p className="text-center text-xs text-neutral-300">
+        <p className="text-center text-xs text-white/70">
           © {new Date().getFullYear()} Fietshaven. Alle rechten voorbehouden.
         </p>
       </div>
