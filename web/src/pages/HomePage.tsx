@@ -6,11 +6,13 @@ import { BikeShowcaseCarousel } from "../components/BikeShowcaseCarousel.tsx";
 import { Hero } from "../components/Hero.tsx";
 import { FeatureCard } from "../components/FeatureCard.tsx";
 import { products } from "../data/catalog.ts";
+import { publicAsset } from "../lib/publicAsset.ts";
 
 const easeOut = "easeOut" as const;
 
 const sectionPadX = "px-4 sm:px-6 lg:px-8";
 const container = "mx-auto max-w-7xl";
+const bikesSectionBackground = publicAsset("home-bg-rider.png");
 
 const staggerContainer: Variants = {
   hidden: { opacity: 0 },
@@ -120,13 +122,24 @@ export function HomePage() {
           </div>
         </section>
 
-        {/* Bikes grid */}
-        <section
-          id="bikes"
-          ref={bikesRef}
-          className={`${sectionPadX} py-14 sm:py-16 lg:py-20`}
-        >
-          <div className={container}>
+        <div className="relative overflow-hidden">
+          <div className="pointer-events-none absolute inset-0" aria-hidden>
+            <img
+              src={bikesSectionBackground}
+              alt=""
+              className="h-full w-full object-cover object-[62%_34%] opacity-58 saturate-150 contrast-115 sm:object-[58%_34%] sm:opacity-62 lg:object-[54%_35%] lg:opacity-66"
+              loading="lazy"
+              decoding="async"
+            />
+          </div>
+
+          {/* Bikes grid */}
+          <section
+            id="bikes"
+            ref={bikesRef}
+            className={`relative z-10 ${sectionPadX} py-14 sm:py-16 lg:py-20`}
+          >
+            <div className={container}>
             <motion.h2
               className="text-center text-2xl font-bold tracking-tight text-gray-900 sm:text-3xl"
               initial={{ opacity: 0, y: 12 }}
@@ -211,17 +224,16 @@ export function HomePage() {
                 Bekijk alle modellen
               </Link>
             </motion.div>
-          </div>
-        </section>
+            </div>
+          </section>
 
-        {/* Accessories */}
-        <section
-          id="accessories"
-          ref={accessoriesRef}
-          className={`border-t border-white/10 ${sectionPadX} py-14 sm:py-16 lg:py-20`}
-          style={{ backgroundColor: "var(--fh-surface-lo)" }}
-        >
-          <div className={container}>
+          {/* Accessories */}
+          <section
+            id="accessories"
+            ref={accessoriesRef}
+            className={`relative z-10 border-t border-white/10 ${sectionPadX} py-14 sm:py-16 lg:py-20`}
+          >
+            <div className={container}>
             <motion.h2
               className="text-2xl font-bold tracking-tight text-gray-900 sm:text-3xl"
               initial={{ opacity: 0, y: 10 }}
@@ -264,8 +276,9 @@ export function HomePage() {
                 </motion.article>
               ))}
             </motion.div>
-          </div>
-        </section>
+            </div>
+          </section>
+        </div>
       </main>
     </motion.div>
   );
