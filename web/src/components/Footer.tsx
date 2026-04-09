@@ -185,7 +185,7 @@ export function Footer() {
 
       <div className="mx-auto mt-12 max-w-7xl border-t border-neutral-700 pt-8">
         <p className="text-center text-xs text-neutral-300">
-          © {new Date().getFullYear()} FietsHaven. Alle rechten voorbehouden.
+          © {new Date().getFullYear()} Fietshaven. Alle rechten voorbehouden.
         </p>
       </div>
     </motion.footer>

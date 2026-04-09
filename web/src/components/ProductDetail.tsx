@@ -85,9 +85,9 @@ export function ProductDetail({ product }: ProductDetailProps) {
   const hasSpecsSection = Boolean(specIntro) || specs.length > 0 || Boolean(moreDetails);
 
   useEffect(() => {
-    document.title = `${product.title} | FietsHaven`;
+    document.title = `${product.title} | Fietshaven`;
     return () => {
-      document.title = "FietsHaven — Elektrische fietsen & accessoires";
+      document.title = "Fietshaven — Elektrische fietsen & accessoires";
     };
   }, [product.title]);
 
@@ -211,7 +211,7 @@ export function ProductDetail({ product }: ProductDetailProps) {
 
             <motion.div variants={detailItem}>
               <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-white/50">
-                FietsHaven
+                Fietshaven
               </p>
               <h1 className="mt-2 text-2xl font-bold tracking-tight text-white sm:text-3xl lg:text-[1.75rem] lg:leading-tight">
                 {product.title}

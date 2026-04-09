@@ -8,7 +8,7 @@ export const gallerySlides: readonly GallerySlide[] = [
   { src: "/bike.jpeg", alt: "Elektrische fiets" },
   { src: "/key-chain.jpeg", alt: "Slimme afstandsbediening" },
   { src: "/phone-holder.jpeg", alt: "Essentials voor onderweg" },
-  { src: "/logo.jpeg", alt: "FietsHaven-logo" },
+  { src: "/logo.jpeg", alt: "Fietshaven-logo" },
 ];
 
 type BikeShowcaseCarouselProps = {

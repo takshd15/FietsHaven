@@ -6,6 +6,7 @@ import { BikeShowcaseCarousel } from "../components/BikeShowcaseCarousel.tsx";
 import { Hero } from "../components/Hero.tsx";
 import { FeatureCard } from "../components/FeatureCard.tsx";
 import { products } from "../data/catalog.ts";
+import { publicAsset } from "../lib/publicAsset.ts";
 
 const easeOut = "easeOut" as const;
 
@@ -51,10 +52,14 @@ const accessoryCards = [
 ] as const;
 
 const btnPrimary =
-  "inline-flex min-h-11 items-center justify-center rounded-2xl bg-white px-8 text-sm font-semibold text-[#4a5260] shadow-sm transition-all hover:scale-[1.01] hover:bg-white/90";
+  "inline-flex min-h-12 w-full items-center justify-center rounded-2xl bg-white px-6 text-[15px] font-semibold text-[#4a5260] shadow-md transition-all active:scale-[0.98] hover:bg-white/90 sm:min-h-11 sm:w-auto sm:px-8 sm:text-sm sm:shadow-sm sm:hover:scale-[1.01]";
 
 const btnSecondary =
-  "inline-flex min-h-10 w-full items-center justify-center rounded-2xl border border-white/30 bg-white/10 px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-white/20";
+  "inline-flex min-h-12 w-full items-center justify-center rounded-2xl border-2 border-white/35 bg-white/12 px-4 py-3 text-[15px] font-semibold text-white transition-colors active:scale-[0.98] hover:bg-white/20 sm:min-h-10 sm:border sm:py-2.5 sm:text-sm";
+
+/** Portret op mobiel, actie-landschap op tablet+ — volle kleur, geen filters */
+const heroBgMobile = publicAsset("home/hero-mobile.png");
+const heroBgDesktop = publicAsset("home/hero-desktop.png");
 
 export function HomePage() {
   const location = useLocation();
@@ -75,25 +80,39 @@ export function HomePage() {
 
   return (
     <motion.div
-      className="min-h-screen"
+      className="relative min-h-screen overflow-hidden"
       style={{ backgroundColor: "var(--fh-bg)" }}
       initial={{ opacity: 0, y: 12 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.45, ease: easeOut }}
     >
-      <main>
+      <div className="pointer-events-none absolute inset-0 min-h-full">
+        <picture className="absolute inset-0 block h-full w-full">
+          <source media="(max-width: 767px)" srcSet={heroBgMobile} />
+          <img
+            src={heroBgDesktop}
+            alt=""
+            aria-hidden="true"
+            className="h-full w-full object-cover object-[52%_36%] md:object-[32%_52%] lg:object-[28%_50%]"
+            loading="eager"
+            decoding="async"
+            fetchPriority="high"
+          />
+        </picture>
+      </div>
+      <main className="relative z-10 pb-[max(0.75rem,env(safe-area-inset-bottom))]">
         <Hero />
 
         {/* Trust bar */}
         <section
           id="values"
           ref={featuresRef}
-          className={`border-y border-white/10 ${sectionPadX} py-12 sm:py-14 lg:py-16`}
+          className={`border-y border-white/10 ${sectionPadX} py-10 sm:py-14 lg:py-16`}
           style={{ backgroundColor: "var(--fh-surface-lo)" }}
         >
           <div className={container}>
             <motion.div
-              className="grid gap-10 sm:gap-8 md:grid-cols-3 md:gap-10 lg:gap-16"
+              className="grid gap-8 sm:gap-8 md:grid-cols-3 md:gap-10 lg:gap-16"
               variants={staggerContainer}
               initial="hidden"
               animate={featuresInView ? "show" : "hidden"}
@@ -124,11 +143,11 @@ export function HomePage() {
         <section
           id="bikes"
           ref={bikesRef}
-          className={`${sectionPadX} py-14 sm:py-16 lg:py-20`}
+          className={`${sectionPadX} py-12 sm:py-16 lg:py-20`}
         >
           <div className={container}>
             <motion.h2
-              className="text-center text-2xl font-bold tracking-tight text-white sm:text-3xl"
+              className="text-center text-[1.375rem] font-bold leading-snug tracking-tight text-white sm:text-2xl md:text-3xl"
               initial={{ opacity: 0, y: 12 }}
               animate={bikesInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 12 }}
               transition={{ duration: 0.45, ease: easeOut }}
@@ -218,12 +237,12 @@ export function HomePage() {
         <section
           id="accessories"
           ref={accessoriesRef}
-          className={`border-t border-white/10 ${sectionPadX} py-14 sm:py-16 lg:py-20`}
+          className={`border-t border-white/10 ${sectionPadX} py-12 sm:py-16 lg:py-20`}
           style={{ backgroundColor: "var(--fh-surface-lo)" }}
         >
           <div className={container}>
             <motion.h2
-              className="text-2xl font-bold tracking-tight text-white sm:text-3xl"
+              className="text-[1.375rem] font-bold leading-snug tracking-tight text-white sm:text-2xl md:text-3xl"
               initial={{ opacity: 0, y: 10 }}
               animate={accessoriesInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 10 }}
               transition={{ duration: 0.45, ease: easeOut }}
@@ -256,7 +275,7 @@ export function HomePage() {
                     <p className="text-sm font-bold text-white sm:text-base">{item.title}</p>
                     <Link
                       to={`/product/${item.slug}`}
-                      className={`${btnSecondary} mt-3 text-sm sm:mt-4`}
+                      className={`${btnSecondary} mt-3 sm:mt-4`}
                     >
                       Bekijk accessoires
                     </Link>

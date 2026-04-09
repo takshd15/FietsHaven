@@ -99,13 +99,13 @@ export function Navbar() {
             <Link to="/" className="flex min-w-0 items-center gap-2.5 text-white">
               <img
                 src="/logo.jpeg"
-                alt="FietsHaven"
+                alt="Fietshaven"
                 className="h-8 w-auto max-h-8 shrink-0 rounded-lg object-contain sm:h-9 md:h-10"
                 height={40}
                 width={120}
               />
               <span className="truncate text-lg font-bold tracking-tight text-white md:text-xl">
-                FietsHaven
+                Fietshaven
               </span>
             </Link>
           </motion.div>

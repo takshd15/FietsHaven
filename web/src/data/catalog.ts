@@ -38,7 +38,7 @@ const bikeAccessoryImages = [
 ];
 
 const bikeAccessoryAlts = [
-  "FietsHaven — merkbeeld",
+  "Fietshaven — merkbeeld",
   "Frame tas met telefoonhouder",
   "Slimme afstandsbediening",
 ] as const;
@@ -212,7 +212,7 @@ export const products: Product[] = [
   },
   {
     slug: "urban-e-bike",
-    title: "FietsHaven Urban E-bike",
+    title: "Fietshaven Urban E-bike",
     price: "€1,899",
     rating: 4.8,
     reviewCount: 124,
@@ -225,7 +225,7 @@ export const products: Product[] = [
       "Premium vering",
     ],
     images: ["/bike.jpeg"],
-    imageAlt: "FietsHaven Urban E-bike",
+    imageAlt: "Fietshaven Urban E-bike",
     reviews: [
       {
         author: "Alex R.",
@@ -255,7 +255,7 @@ export const products: Product[] = [
     rating: 4.7,
     reviewCount: 56,
     description:
-      "Veilige afstandsbediening voor je FietsHaven e-bike—vergrendelen, ontgrendelen en essentiële functies in één compacte vorm.",
+      "Veilige afstandsbediening voor je Fietshaven e-bike—vergrendelen, ontgrendelen en essentiële functies in één compacte vorm.",
     features: [
       "Versleutelde draadloze koppeling",
       "Tot 12 maanden batterijduur",
@@ -266,7 +266,7 @@ export const products: Product[] = [
     imageAlt: "Slimme fietssleutel afstandsbediening",
     lowStockCount: 14,
     moreDetails:
-      "Frequentie: 2,4 GHz met versleutelde koppeling. Batterij: CR2032 (zelf te vervangen). Bereik: tot ca. 10 m zichtlijn. Weerbestendigheid: IP54. Compatibel met FietsHaven Urban E-bike (firmware 2023 en nieuwer).",
+      "Frequentie: 2,4 GHz met versleutelde koppeling. Batterij: CR2032 (zelf te vervangen). Bereik: tot ca. 10 m zichtlijn. Weerbestendigheid: IP54. Compatibel met Fietshaven Urban E-bike (firmware 2023 en nieuwer).",
     reviews: [
       {
         author: "Jordan P.",

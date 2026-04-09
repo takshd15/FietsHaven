@@ -54,7 +54,7 @@ export function ProductCard({
         <div className="mt-5 flex flex-1 flex-col text-left">
           <h3 className="text-lg font-bold leading-snug text-gray-900">{name}</h3>
           <p className="mt-1 text-xs font-medium tracking-wide text-gray-400">
-            FietsHaven
+            Fietshaven
           </p>
           <p className="mt-3 text-lg font-bold tabular-nums text-gray-900">
             {price}

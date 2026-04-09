@@ -34,7 +34,7 @@ export class ErrorBoundary extends Component<Props, State> {
             to="/"
             className="mt-8 inline-flex rounded-lg bg-gray-900 px-6 py-3 text-sm font-semibold text-white hover:bg-black"
           >
-            Naar FietsHaven
+            Naar Fietshaven
           </Link>
         </div>
       );

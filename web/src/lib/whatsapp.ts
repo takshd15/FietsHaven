@@ -41,7 +41,7 @@ export type CartLineBrief = {
 
 export function buildCartOrderMessage(lines: CartLineBrief[]): string {
   if (lines.length === 0) {
-    return "Hoi, ik wil graag een bestelling plaatsen bij FietsHaven.";
+    return "Hoi, ik wil graag een bestelling plaatsen bij Fietshaven.";
   }
   const body = lines
     .map((l) => {
@@ -49,5 +49,5 @@ export function buildCartOrderMessage(lines: CartLineBrief[]): string {
       return `• ${l.title} (${l.price})${q}`;
     })
     .join("\n");
-  return `Hoi, ik wil het volgende bestellen bij FietsHaven:\n\n${body}\n\nKun je beschikbaarheid en de vervolgstappen bevestigen?`;
+  return `Hoi, ik wil het volgende bestellen bij Fietshaven:\n\n${body}\n\nKun je beschikbaarheid en de vervolgstappen bevestigen?`;
 }

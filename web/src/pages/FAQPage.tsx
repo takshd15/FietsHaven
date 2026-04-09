@@ -37,7 +37,7 @@ export function FAQPage() {
       <main className="px-5 py-14 sm:px-6 lg:px-8 lg:py-20">
         <div className="mx-auto max-w-3xl">
           <p className="text-center text-[11px] font-semibold uppercase tracking-[0.22em] text-white/50">
-            Over FietsHaven
+            Over Fietshaven
           </p>
           <h1 className="mt-3 text-center text-3xl font-bold tracking-tight text-white sm:text-4xl">
             Veelgestelde vragen
@@ -52,7 +52,7 @@ export function FAQPage() {
             <div className="rounded-3xl border border-white/15 px-8 py-7 shadow-sm" style={{ backgroundColor: "var(--fh-surface)" }}>
               <img
                 src="/logo.jpeg"
-                alt="FietsHaven"
+                alt="Fietshaven"
                 className="mx-auto h-12 w-auto object-contain sm:h-14"
                 height={56}
                 width={160}
@@ -68,7 +68,7 @@ export function FAQPage() {
             transition={{ duration: 0.45, ease: easeOut, delay: 0.08 }}
           >
             <p className="text-lg font-medium leading-relaxed text-white/85">
-              FietsHaven is er voor wie prestaties, stijl en betrouwbaarheid belangrijk vindt. We
+              Fietshaven is er voor wie prestaties, stijl en betrouwbaarheid belangrijk vindt. We
               ontwerpen moderne elektrische fietsen en accessoires die je dagelijkse rit
               moeiteloos maken.
             </p>
