@@ -1,73 +1,72 @@
-import { AnimatePresence, motion } from "framer-motion";
-import { ChevronLeft, ChevronRight } from "lucide-react";
-import { useCallback, useEffect, useRef, useState, type TouchEvent } from "react";
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { Link } from "react-router-dom";
-import { publicAsset } from "../lib/publicAsset.ts";
+import { ChevronLeft, ChevronRight, Menu, ShoppingCart, X } from "lucide-react";
+import { useCallback, useEffect, useRef, useState, type TouchEvent } from "react";
+import type { Product } from "../data/catalog.ts";
+import { products } from "../data/catalog.ts";
+import { useCart } from "../context/CartContext.tsx";
+import { EASE, springTap } from "../lib/motion.ts";
+import { buildCartOrderMessage, openWhatsAppOrder } from "../lib/whatsapp.ts";
 
 const easeOut = "easeOut" as const;
 
-const heroBikeSlides = [
-  { src: publicAsset("hero/dubbele-accu.jpeg"), alt: "Elektrische fiets met dubbele accu" },
-  { src: publicAsset("hero/mini.jpeg"), alt: "Elektrische fiets Mini" },
+/** Accessoires uitsluiten — alleen fietsmodellen in de hero-slideshow */
+const ACCESSORY_SLUGS = new Set(["smart-key-remote", "ride-essentials"]);
+
+function getHeroBikes(): Product[] {
+  return products.filter((p) => !ACCESSORY_SLUGS.has(p.slug));
+}
+
+const heroBikes = getHeroBikes();
+
+const NAV_LINKS = [
+  { label: "Fietsen", to: "/#bikes" },
+  { label: "Accessoires", to: "/#accessories" },
+  { label: "FAQ", to: "/faq" },
+  { label: "Contact", to: "/contact" },
 ] as const;
 
-const heroHeading = {
-  hidden: { opacity: 0, y: 24, scale: 0.98 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    scale: 1,
-    transition: { duration: 0.55, ease: easeOut },
-  },
-};
-
-const heroSub = {
-  hidden: { opacity: 0, y: 18 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.45, delay: 0.14, ease: easeOut },
-  },
-};
-
-const heroButtonsContainer = {
+/** Left column — staggered entrance */
+const leftContainer = {
   hidden: { opacity: 0 },
   visible: {
     opacity: 1,
-    transition: { staggerChildren: 0.08, delayChildren: 0.38 },
+    transition: { staggerChildren: 0.1, delayChildren: 0.08 },
   },
 };
 
-const heroButton = {
-  hidden: { opacity: 0, y: 18 },
+const leftItem = {
+  hidden: { opacity: 0, y: 22 },
   visible: {
     opacity: 1,
     y: 0,
-    transition: { duration: 0.42, ease: easeOut },
+    transition: { duration: 0.52, ease: easeOut },
   },
 };
 
-const btnPrimary =
-  "inline-flex min-h-11 items-center justify-center rounded-xl border border-gray-200 bg-white px-7 text-sm font-semibold text-gray-900 transition-colors hover:bg-gray-100";
-const btnSecondary =
-  "inline-flex min-h-11 items-center justify-center rounded-xl border border-white/35 bg-transparent px-7 text-sm font-semibold text-white transition-colors hover:bg-white/10";
+const rightBar = {
+  hidden: { opacity: 0, y: -10 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.45, ease: easeOut },
+  },
+};
 
-const SLIDE_INTERVAL_MS = 2500;
+const SLIDE_INTERVAL_MS = 4500;
 
-/** Full-bleed within the hero card; square on small screens to match product shots */
-const heroImgClass =
-  "absolute inset-0 h-full w-full object-contain object-center";
+const slideMotion = {
+  initial: { opacity: 0, y: 14 },
+  animate: { opacity: 1, y: 0 },
+  exit: { opacity: 0, y: -10 },
+};
 
-const heroImgSizes =
-  "(min-width: 1280px) 640px, (min-width: 1024px) 48vw, 100vw";
-
-function HeroImage() {
+function HeroBikeSlideshow({ bikes }: { bikes: Product[] }) {
+  const reduceMotion = useReducedMotion();
   const [index, setIndex] = useState(0);
-  const [tabHidden, setTabHidden] = useState(
-    () => typeof document !== "undefined" && document.hidden,
-  );
   const touchStartX = useRef<number | null>(null);
-  const len = heroBikeSlides.length;
+  const len = bikes.length;
+  const current = bikes[index] ?? bikes[0];
 
   const goPrev = useCallback(() => {
     setIndex((i) => (i - 1 + len) % len);
@@ -80,6 +79,10 @@ function HeroImage() {
   const goNextRef = useRef(goNext);
   goNextRef.current = goNext;
 
+  const [tabHidden, setTabHidden] = useState(
+    () => typeof document !== "undefined" && document.hidden,
+  );
+
   useEffect(() => {
     const onVis = () => setTabHidden(document.hidden);
     document.addEventListener("visibilitychange", onVis);
@@ -87,10 +90,19 @@ function HeroImage() {
   }, []);
 
   useEffect(() => {
-    if (tabHidden) return;
+    if (len <= 1 || tabHidden) return;
     const id = window.setInterval(() => goNextRef.current(), SLIDE_INTERVAL_MS);
     return () => window.clearInterval(id);
-  }, [tabHidden]);
+  }, [len, tabHidden]);
+
+  useEffect(() => {
+    function onKey(e: KeyboardEvent) {
+      if (e.key === "ArrowLeft") goPrev();
+      if (e.key === "ArrowRight") goNext();
+    }
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [goPrev, goNext]);
 
   const onTouchStart = (e: TouchEvent) => {
     touchStartX.current = e.touches[0].clientX;
@@ -98,159 +110,319 @@ function HeroImage() {
 
   const onTouchEnd = (e: TouchEvent) => {
     if (touchStartX.current == null) return;
-    const endX = e.changedTouches[0].clientX;
-    const dx = endX - touchStartX.current;
+    const dx = e.changedTouches[0].clientX - touchStartX.current;
     touchStartX.current = null;
     if (dx > 48) goPrev();
     else if (dx < -48) goNext();
   };
 
+  if (!current || len === 0) {
+    return null;
+  }
+
+  const transition = reduceMotion
+    ? { duration: 0 }
+    : { duration: 0.52, ease: EASE };
+
   return (
     <div
-      className="relative flex min-h-0 w-full flex-1 flex-col lg:min-h-[480px]"
+      className="flex w-full max-w-lg flex-col items-center"
       onTouchStart={onTouchStart}
       onTouchEnd={onTouchEnd}
+      role="region"
+      aria-roledescription="carousel"
+      aria-label="Uitgelichte fietsen"
     >
-      <div
-        className="relative w-full overflow-hidden bg-neutral-950 px-0 pt-0 pb-[max(0.75rem,env(safe-area-inset-bottom))] lg:py-0"
-        role="region"
-        aria-roledescription="carousel"
-        aria-label="Uitgelichte fietsen"
-      >
-        {/* Square viewport on mobile = full card width; desktop fills column height */}
-        <div className="relative aspect-square w-full max-w-none min-h-0 lg:aspect-auto lg:min-h-[min(52vh,560px)] lg:flex-1 xl:min-h-[min(56vh,600px)]">
-          <AnimatePresence initial={false} mode="wait">
-            <motion.img
-              key={heroBikeSlides[index].src}
-              src={heroBikeSlides[index].src}
-              alt={heroBikeSlides[index].alt}
-              width={1080}
-              height={1080}
-              sizes={heroImgSizes}
-              fetchPriority={index === 0 ? "high" : "low"}
-              decoding="async"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.45, ease: easeOut }}
-              className={heroImgClass}
-              draggable={false}
-            />
+      <div className="relative w-full">
+        {len > 1 ? (
+          <>
+            <motion.button
+              type="button"
+              onClick={goPrev}
+              className="absolute left-0 top-1/2 z-10 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-white/20 bg-black/40 text-white transition-colors hover:bg-black/60"
+              aria-label="Vorige fiets"
+              whileHover={{ scale: 1.08, backgroundColor: "rgba(0,0,0,0.55)" }}
+              whileTap={{ scale: 0.94 }}
+              transition={springTap}
+            >
+              <ChevronLeft className="h-5 w-5" strokeWidth={1.5} />
+            </motion.button>
+            <motion.button
+              type="button"
+              onClick={goNext}
+              className="absolute right-0 top-1/2 z-10 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-white/20 bg-black/40 text-white transition-colors hover:bg-black/60"
+              aria-label="Volgende fiets"
+              whileHover={{ scale: 1.08, backgroundColor: "rgba(0,0,0,0.55)" }}
+              whileTap={{ scale: 0.94 }}
+              transition={springTap}
+            >
+              <ChevronRight className="h-5 w-5" strokeWidth={1.5} />
+            </motion.button>
+          </>
+        ) : null}
+
+        <div className="relative min-h-[min(52vh,520px)] overflow-hidden px-10 sm:px-12">
+          <AnimatePresence mode="wait" initial={false}>
+            <motion.div
+              key={current.slug}
+              initial={reduceMotion ? false : slideMotion.initial}
+              animate={reduceMotion ? undefined : slideMotion.animate}
+              exit={reduceMotion ? undefined : slideMotion.exit}
+              transition={transition}
+              className="flex flex-col items-center"
+            >
+              <div className="w-full bg-white p-4 sm:p-6">
+                <img
+                  src={current.images[0]}
+                  alt={current.imageAlt}
+                  className="mx-auto h-auto max-h-[min(44vh,440px)] w-full object-contain object-center"
+                  width={900}
+                  height={900}
+                  fetchPriority={index === 0 ? "high" : "low"}
+                  decoding="async"
+                />
+              </div>
+              <div className="mt-8 max-w-md text-center">
+                <p className="text-base font-semibold tracking-wide text-white sm:text-lg">{current.title}</p>
+                <p className="mt-2 text-sm text-white/65">{current.price}</p>
+                <Link
+                  to={`/product/${current.slug}`}
+                  className="mt-6 inline-block text-xs font-medium tracking-wide text-white underline underline-offset-[10px] transition-opacity hover:opacity-85"
+                >
+                  Bekijk specificaties
+                </Link>
+              </div>
+            </motion.div>
           </AnimatePresence>
         </div>
+      </div>
 
-        <div className="pointer-events-none absolute inset-y-0 left-0 right-0 z-20 flex items-center justify-between px-1.5 sm:px-3 lg:px-4">
-          <button
-            type="button"
-            onClick={(e) => {
-              e.preventDefault();
-              goPrev();
-            }}
-            className="pointer-events-auto flex h-10 w-10 min-h-[44px] min-w-[44px] shrink-0 items-center justify-center rounded-full border border-white/20 bg-black/30 text-white transition-colors hover:bg-black/45 sm:h-10 sm:w-10"
-            aria-label="Vorige fiets"
-          >
-            <ChevronLeft className="h-5 w-5 sm:h-6 sm:w-6" strokeWidth={2} />
-          </button>
-          <button
-            type="button"
-            onClick={(e) => {
-              e.preventDefault();
-              goNext();
-            }}
-            className="pointer-events-auto flex h-10 w-10 min-h-[44px] min-w-[44px] shrink-0 items-center justify-center rounded-full border border-white/20 bg-black/30 text-white transition-colors hover:bg-black/45 sm:h-10 sm:w-10"
-            aria-label="Volgende fiets"
-          >
-            <ChevronRight className="h-5 w-5 sm:h-6 sm:w-6" strokeWidth={2} />
-          </button>
-        </div>
-
-        <div className="pointer-events-none absolute bottom-3 left-0 right-0 z-20 flex justify-center gap-1 sm:bottom-4">
-          {heroBikeSlides.map((_, i) => (
-            <button
-              key={heroBikeSlides[i].src}
+      {len > 1 ? (
+        <div className="mt-8 flex justify-center gap-2">
+          {bikes.map((b, i) => (
+            <motion.button
+              key={b.slug}
               type="button"
               onClick={() => setIndex(i)}
-              className="pointer-events-auto flex min-h-[44px] min-w-[44px] items-center justify-center p-2"
-              aria-label={`Ga naar dia ${i + 1} van ${len}`}
+              layout
+              className={`h-1.5 rounded-full ${
+                i === index ? "w-8 bg-white" : "w-1.5 bg-white/35 hover:bg-white/55"
+              }`}
+              aria-label={`Ga naar ${b.title}`}
               aria-current={i === index}
-            >
-              <span
-                className={`block rounded-full transition-all ${
-                  i === index ? "h-1.5 w-6 bg-white" : "h-1.5 w-1.5 bg-white/35 hover:bg-white/60"
-                }`}
-                aria-hidden
-              />
-            </button>
+              whileHover={{ scale: 1.15 }}
+              whileTap={{ scale: 0.92 }}
+              transition={springTap}
+            />
           ))}
         </div>
-      </div>
+      ) : null}
     </div>
   );
 }
 
 export function Hero() {
-  return (
-    <section id="home" className="px-4 pb-12 pt-8 sm:px-6 lg:px-8 lg:pb-16 lg:pt-10">
-      <div className="relative mx-auto max-w-7xl overflow-hidden rounded-2xl bg-neutral-950 ring-1 ring-white/10 sm:rounded-3xl">
-        <div className="relative z-10 grid gap-0 lg:grid-cols-2 lg:items-stretch">
-          <div className="order-2 flex flex-col justify-center px-6 py-10 sm:px-10 sm:py-12 lg:order-1 lg:py-16 lg:pl-12 lg:pr-6 xl:pl-14">
-            <div className="max-w-xl">
-              <motion.h1
-                variants={heroHeading}
-                initial="hidden"
-                animate="visible"
-                className="text-3xl font-bold leading-[1.1] tracking-tight text-white sm:text-4xl lg:text-5xl"
-              >
-                Ontdek jouw perfecte rit
-              </motion.h1>
-              <motion.p
-                variants={heroSub}
-                initial="hidden"
-                animate="visible"
-                className="mt-4 text-base font-normal leading-relaxed text-white/70 sm:text-lg"
-              >
-                Ontdek onze collectie van hoogwaardige fietsen.
-              </motion.p>
-            </div>
+  const { items, totalQuantity } = useCart();
+  const [menuOpen, setMenuOpen] = useState(false);
 
+  function handleCartClick() {
+    const msg = buildCartOrderMessage(
+      items.map((i) => ({ title: i.title, price: i.price, quantity: i.quantity })),
+    );
+    openWhatsAppOrder(msg);
+  }
+
+  return (
+    <section id="home" className="relative min-h-[calc(100svh-4rem)]">
+      <div className="grid min-h-[calc(100svh-4rem)] grid-cols-1 lg:grid-cols-2">
+        {/* Left — white */}
+        <div className="relative flex min-h-[52vh] flex-col justify-between bg-white px-6 py-8 sm:px-10 lg:min-h-[calc(100svh-4rem)] lg:px-14 lg:py-12">
+          <motion.header
+            className="flex items-start justify-between gap-4"
+            variants={leftItem}
+            initial="hidden"
+            animate="visible"
+          >
+            <Link
+              to="/"
+              className="text-sm font-semibold tracking-[0.35em] text-neutral-900 sm:text-base"
+            >
+              FIETS HAVEN
+            </Link>
+            <motion.button
+              type="button"
+              className="p-2 text-neutral-700 lg:hidden"
+              aria-label={menuOpen ? "Menu sluiten" : "Menu openen"}
+              onClick={() => setMenuOpen((o) => !o)}
+              whileTap={{ scale: 0.92 }}
+              transition={springTap}
+            >
+              {menuOpen ? <X className="h-6 w-6" strokeWidth={1.5} /> : <Menu className="h-6 w-6" strokeWidth={1.5} />}
+            </motion.button>
+          </motion.header>
+
+          <div className="flex flex-1 flex-col justify-center py-12 lg:py-0">
             <motion.div
-              className="mt-8 flex flex-wrap gap-3 sm:gap-4"
-              variants={heroButtonsContainer}
+              className="max-w-xl"
+              variants={leftContainer}
               initial="hidden"
               animate="visible"
             >
-              <motion.div variants={heroButton}>
-                <Link to="/#bikes" className={btnPrimary}>
-                  <motion.span
-                    className="inline-flex"
-                    whileHover={{ scale: 1.02 }}
-                    whileTap={{ scale: 0.98 }}
-                    transition={{ duration: 0.2, ease: easeOut }}
+              <motion.h1
+                variants={leftItem}
+                className="text-4xl font-semibold leading-[1.05] tracking-tight text-neutral-900 sm:text-5xl lg:text-6xl"
+              >
+                ONTDEK JOUW
+                <br />
+                PERFECTE RIT
+              </motion.h1>
+              <motion.p
+                variants={leftItem}
+                className="mt-6 max-w-md text-base leading-relaxed text-neutral-600 sm:text-lg"
+              >
+                Ontdek onze collectie van hoogwaardige fietsen.
+              </motion.p>
+              <motion.div variants={leftItem} className="mt-10">
+                <motion.div
+                  className="inline-block"
+                  whileHover={{ scale: 1.03 }}
+                  whileTap={{ scale: 0.97 }}
+                  transition={springTap}
+                >
+                  <Link
+                    to="/#bikes"
+                    className="inline-flex min-h-12 min-w-[200px] items-center justify-center bg-neutral-900 px-10 text-sm font-semibold tracking-wide text-white transition-colors hover:bg-neutral-800"
                   >
                     Bekijk fietsen
-                  </motion.span>
-                </Link>
-              </motion.div>
-              <motion.div variants={heroButton}>
-                <Link to="/#values" className={btnSecondary}>
-                  <motion.span
-                    whileHover={{ scale: 1.02 }}
-                    whileTap={{ scale: 0.98 }}
-                    transition={{ duration: 0.2, ease: easeOut }}
-                    className="inline-flex"
-                  >
-                    Meer informatie
-                  </motion.span>
-                </Link>
+                  </Link>
+                </motion.div>
               </motion.div>
             </motion.div>
           </div>
 
-          <div className="order-1 flex min-h-0 w-full flex-col lg:order-2 lg:h-full lg:min-h-0">
-            <HeroImage />
+          <motion.div
+            className="flex flex-col gap-6 border-t border-neutral-200/80 pt-8 lg:flex-row lg:items-center lg:justify-between lg:border-t-0 lg:pt-0"
+            variants={leftContainer}
+            initial="hidden"
+            animate="visible"
+          >
+            <motion.p
+              variants={leftItem}
+              className="text-[11px] font-medium tracking-[0.28em] text-neutral-400"
+            >
+              AMSTERDAM · KWALITEIT · SERVICE
+            </motion.p>
+            <motion.nav
+              variants={leftContainer}
+              className="hidden gap-8 text-xs font-medium tracking-wide text-neutral-500 lg:flex"
+            >
+              {NAV_LINKS.map(({ label, to }) => (
+                <motion.span key={to} variants={leftItem}>
+                  <Link to={to} className="transition-colors hover:text-neutral-900">
+                    {label}
+                  </Link>
+                </motion.span>
+              ))}
+            </motion.nav>
+          </motion.div>
+        </div>
+
+        {/* Right — black + slideshow */}
+        <div className="relative flex min-h-[48vh] flex-col bg-neutral-950 lg:min-h-[calc(100svh-4rem)]">
+          <motion.div
+            className="flex items-center justify-end gap-6 px-6 py-8 sm:px-10 lg:px-14"
+            variants={rightBar}
+            initial="hidden"
+            animate="visible"
+          >
+            <Link
+              to="/contact"
+              className="hidden text-xs font-medium tracking-[0.2em] text-white/70 transition-colors hover:text-white sm:inline"
+            >
+              AMSTERDAM
+            </Link>
+            <motion.button
+              type="button"
+              onClick={handleCartClick}
+              aria-label={
+                totalQuantity > 0
+                  ? `Winkelwagen, ${totalQuantity} producten`
+                  : "Winkelwagen — WhatsApp"
+              }
+              className="relative p-2 text-white/85 transition-colors hover:text-white"
+              whileHover={{ scale: 1.08 }}
+              whileTap={{ scale: 0.92 }}
+              transition={springTap}
+            >
+              <ShoppingCart className="h-6 w-6" strokeWidth={1.5} />
+              {totalQuantity > 0 ? (
+                <span className="absolute -right-0.5 -top-0.5 flex h-4 min-w-[1rem] items-center justify-center rounded-full bg-white px-1 text-[10px] font-semibold text-neutral-900">
+                  {totalQuantity > 99 ? "99+" : totalQuantity}
+                </span>
+              ) : null}
+            </motion.button>
+          </motion.div>
+
+          <div className="flex flex-1 flex-col items-center justify-center px-4 pb-12 pt-2 sm:px-6 lg:pb-16">
+            <HeroBikeSlideshow bikes={heroBikes} />
           </div>
         </div>
       </div>
+
+      {/* Mobile full-screen menu */}
+      <AnimatePresence>
+        {menuOpen ? (
+          <motion.div
+            className="fixed inset-0 z-[60] bg-white lg:hidden"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.22, ease: EASE }}
+          >
+            <div className="flex h-full flex-col px-6 py-8">
+              <div className="flex justify-end">
+                <motion.button
+                  type="button"
+                  className="p-2"
+                  aria-label="Menu sluiten"
+                  onClick={() => setMenuOpen(false)}
+                  whileTap={{ scale: 0.9 }}
+                  transition={springTap}
+                >
+                  <X className="h-6 w-6" />
+                </motion.button>
+              </div>
+              <motion.nav
+                className="mt-12 flex flex-col gap-1"
+                initial="hidden"
+                animate="show"
+                variants={{
+                  hidden: {},
+                  show: { transition: { staggerChildren: 0.06, delayChildren: 0.05 } },
+                }}
+              >
+                {NAV_LINKS.map(({ label, to }) => (
+                  <motion.div
+                    key={to}
+                    variants={{
+                      hidden: { opacity: 0, x: -16 },
+                      show: { opacity: 1, x: 0, transition: { duration: 0.35, ease: EASE } },
+                    }}
+                  >
+                    <Link
+                      to={to}
+                      className="block py-3 text-lg font-medium text-neutral-900"
+                      onClick={() => setMenuOpen(false)}
+                    >
+                      {label}
+                    </Link>
+                  </motion.div>
+                ))}
+              </motion.nav>
+            </div>
+          </motion.div>
+        ) : null}
+      </AnimatePresence>
     </section>
   );
 }

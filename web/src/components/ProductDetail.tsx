@@ -52,10 +52,10 @@ function StarRow({ rating, size = "md" }: { rating: number; size?: "sm" | "md" }
             key={i}
             className={`${dim} ${
               filled
-                ? "fill-amber-400 text-amber-400"
+                ? "fill-neutral-900 text-neutral-900"
                 : half
-                  ? "fill-amber-400/55 text-amber-400"
-                  : "fill-gray-200 text-gray-200"
+                  ? "fill-neutral-900/55 text-neutral-900"
+                  : "fill-neutral-200 text-neutral-200"
             }`}
             strokeWidth={1.5}
           />
@@ -85,9 +85,9 @@ export function ProductDetail({ product }: ProductDetailProps) {
   const hasSpecsSection = Boolean(specIntro) || specs.length > 0 || Boolean(moreDetails);
 
   useEffect(() => {
-    document.title = `${product.title} | Fietshaven`;
+    document.title = `${product.title} | Fiets Haven`;
     return () => {
-      document.title = "Fietshaven — Elektrische fietsen & accessoires";
+      document.title = "Fiets Haven — Elektrische fietsen & accessoires";
     };
   }, [product.title]);
 
@@ -150,7 +150,7 @@ export function ProductDetail({ product }: ProductDetailProps) {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -12 }}
             transition={{ duration: 0.25, ease: easeOut }}
-            className="fixed left-1/2 top-20 z-[100] max-w-[min(90vw,20rem)] -translate-x-1/2 rounded-2xl bg-white px-5 py-3 text-center text-sm font-semibold text-[#4a5260] shadow-lg"
+            className="fixed left-1/2 top-20 z-[100] max-w-[min(90vw,20rem)] -translate-x-1/2 border border-neutral-200 bg-white px-5 py-3 text-center text-sm font-semibold text-neutral-800"
           >
             Toegevoegd aan winkelwagen
           </motion.div>
@@ -198,22 +198,22 @@ export function ProductDetail({ product }: ProductDetailProps) {
           >
             <motion.div variants={detailItem} className="flex flex-wrap items-center gap-2">
               {product.bestSeller ? (
-                <span className="inline-flex items-center gap-1 rounded-full bg-amber-400/20 px-2.5 py-1 text-xs font-semibold text-amber-200">
+                <span className="inline-flex items-center gap-1 rounded-full border border-neutral-200 bg-neutral-100 px-2.5 py-1 text-xs font-medium text-neutral-800">
                   <Award className="h-3.5 w-3.5" strokeWidth={2} />
                   Bestseller
                 </span>
               ) : null}
-              <span className="inline-flex items-center gap-1 rounded-full border border-gray-200 bg-gray-50 px-2.5 py-1 text-xs font-medium text-gray-700">
+              <span className="inline-flex items-center gap-1 rounded-full border border-neutral-200 bg-neutral-50 px-2.5 py-1 text-xs font-medium text-neutral-700">
                 <ShieldCheck className="h-3.5 w-3.5" strokeWidth={2} />
                 30 dagen retour · 2 jaar garantie
               </span>
             </motion.div>
 
             <motion.div variants={detailItem}>
-              <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-gray-500">
-                Fietshaven
+              <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-neutral-500">
+                Fiets Haven
               </p>
-              <h1 className="mt-2 text-2xl font-bold tracking-tight text-gray-900 sm:text-3xl lg:text-[1.75rem] lg:leading-tight">
+              <h1 className="mt-2 text-2xl font-semibold tracking-tight text-neutral-900 sm:text-3xl lg:text-[1.75rem] lg:leading-tight">
                 {product.title}
               </h1>
             </motion.div>
@@ -246,7 +246,7 @@ export function ProductDetail({ product }: ProductDetailProps) {
                 {product.features.map((line) => (
                   <li key={line} className="flex gap-3 text-sm text-gray-700">
                     <Check
-                      className="mt-0.5 h-4 w-4 shrink-0 text-emerald-400"
+                      className="mt-0.5 h-4 w-4 shrink-0 text-neutral-900"
                       strokeWidth={2.5}
                     />
                     {line}
@@ -295,7 +295,7 @@ export function ProductDetail({ product }: ProductDetailProps) {
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.5, ease: easeOut, delay: reduceMotion ? 0 : 0.08 }}
           >
-            <div className="sticky top-24 rounded-3xl border border-gray-200 p-6 shadow-md" style={{ backgroundColor: "var(--fh-surface)" }}>
+            <div className="sticky top-24 border border-neutral-200 bg-white p-6" style={{ backgroundColor: "var(--fh-surface)" }}>
               <PurchasePanel
                 product={product}
                 quantity={quantity}
@@ -312,7 +312,7 @@ export function ProductDetail({ product }: ProductDetailProps) {
 
           {/* Purchase card — mobile (in flow) */}
           <div className="lg:col-span-12 lg:hidden">
-            <div className="rounded-3xl border border-gray-200 p-6 shadow-md" style={{ backgroundColor: "var(--fh-surface)" }}>
+            <div className="border border-neutral-200 bg-white p-6" style={{ backgroundColor: "var(--fh-surface)" }}>
               <PurchasePanel
                 product={product}
                 quantity={quantity}
@@ -371,7 +371,7 @@ export function ProductDetail({ product }: ProductDetailProps) {
                   delay: reduceMotion ? 0 : i * 0.07,
                   ease: easeOut,
                 }}
-                className="rounded-3xl border border-gray-200 p-5 shadow-sm" style={{ backgroundColor: "var(--fh-surface)" } as React.CSSProperties}
+                className="border border-neutral-200 p-5" style={{ backgroundColor: "var(--fh-surface)" } as React.CSSProperties}
               >
                 <div className="flex items-center justify-between gap-2">
                   <span className="font-semibold text-gray-900">{r.author}</span>
@@ -387,7 +387,7 @@ export function ProductDetail({ product }: ProductDetailProps) {
       </div>
 
       {/* Sticky mobile CTA */}
-      <div className="fixed bottom-0 left-0 right-0 z-40 border-t border-gray-200 p-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] shadow-[0_-8px_24px_rgba(15,23,42,0.12)] backdrop-blur-md lg:hidden" style={{ backgroundColor: "var(--fh-surface-lo)" }}>
+      <div className="fixed bottom-0 left-0 right-0 z-40 border-t border-neutral-200 bg-white/95 p-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] backdrop-blur-md lg:hidden" style={{ backgroundColor: "var(--fh-surface-lo)" }}>
         <div className="mx-auto max-w-7xl px-1">
           <div className="flex items-center gap-3">
             <div className="min-w-0 flex-1">
@@ -404,7 +404,7 @@ export function ProductDetail({ product }: ProductDetailProps) {
               disabled={buyDisabled}
               whileHover={{ scale: buyDisabled ? 1 : 1.02 }}
               whileTap={{ scale: buyDisabled ? 1 : 0.98 }}
-              className="min-h-12 min-w-0 flex-1 rounded-2xl bg-white px-4 text-sm font-semibold text-[#4a5260] shadow-md transition-all hover:bg-white/90 disabled:opacity-70"
+              className="min-h-12 min-w-0 flex-1 rounded-xl bg-neutral-900 px-4 text-sm font-semibold text-white transition-colors hover:bg-neutral-800 disabled:opacity-70"
             >
               Nu kopen - WhatsApp
             </motion.button>
@@ -424,7 +424,7 @@ export function ProductDetail({ product }: ProductDetailProps) {
                 initial={{ opacity: 0, y: 4 }}
                 animate={{ opacity: 1, y: 0 }}
               >
-                <Check className="h-4 w-4 text-emerald-400" strokeWidth={2.5} />
+                <Check className="h-4 w-4 text-neutral-900" strokeWidth={2.5} />
                 Toegevoegd aan winkelwagen
               </motion.span>
             ) : (
@@ -467,8 +467,8 @@ function PurchasePanel({
       </p>
 
       <div className="space-y-2 text-sm">
-        <p className="flex items-center gap-2 font-medium text-emerald-300">
-          <span className="inline-block h-2 w-2 shrink-0 rounded-full bg-emerald-400" />
+        <p className="flex items-center gap-2 font-medium text-neutral-800">
+          <span className="inline-block h-2 w-2 shrink-0 rounded-full bg-neutral-900" />
           Op voorraad
         </p>
         <p className="flex items-start gap-2 text-gray-700">
@@ -476,7 +476,7 @@ function PurchasePanel({
           Gratis levering binnen 3–5 dagen
         </p>
         {lowStock != null ? (
-          <p className="flex items-center gap-2 font-medium text-amber-300">
+          <p className="flex items-center gap-2 font-medium text-neutral-700">
             <Package className="h-4 w-4 shrink-0" strokeWidth={2} />
             Nog {lowStock} op voorraad
           </p>
@@ -521,7 +521,7 @@ function PurchasePanel({
           whileHover={{ scale: buyDisabled ? 1 : 1.02 }}
           whileTap={{ scale: buyDisabled ? 1 : 0.98 }}
           transition={{ duration: 0.2, ease: easeOut }}
-          className="flex min-h-[3.25rem] w-full items-center justify-center rounded-2xl bg-white py-3.5 text-base font-semibold text-[#4a5260] shadow-md transition-all hover:bg-white/90 disabled:opacity-75"
+          className="flex min-h-[3.25rem] w-full items-center justify-center rounded-xl bg-neutral-900 py-3.5 text-base font-semibold text-white transition-colors hover:bg-neutral-800 disabled:opacity-75"
         >
           Nu kopen - WhatsApp
         </motion.button>
@@ -540,7 +540,7 @@ function PurchasePanel({
               initial={{ opacity: 0, y: 4 }}
               animate={{ opacity: 1, y: 0 }}
             >
-              <Check className="h-4 w-4 text-emerald-400" strokeWidth={2.5} />
+              <Check className="h-4 w-4 text-neutral-900" strokeWidth={2.5} />
               Toegevoegd aan winkelwagen
             </motion.span>
           ) : (

@@ -1,9 +1,8 @@
 import { motion, useInView } from "framer-motion";
-import { useRef, useState, type FormEvent } from "react";
+import { useRef } from "react";
 import { Link } from "react-router-dom";
 
 const quickLinks = [
-  { label: "Home", to: "/" },
   { label: "Fietsen", to: "/#bikes" },
   { label: "Accessoires", to: "/#accessories" },
   { label: "FAQ", to: "/faq" },
@@ -41,29 +40,15 @@ function IconInstagram({ className }: { className?: string }) {
   );
 }
 
-function IconYoutube({ className }: { className?: string }) {
-  return (
-    <svg className={className} viewBox="0 0 24 24" fill="currentColor" aria-hidden>
-      <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" />
-    </svg>
-  );
-}
-
 const social = [
   { Icon: IconFacebook, label: "Facebook" },
   { Icon: IconTwitter, label: "X" },
   { Icon: IconInstagram, label: "Instagram" },
-  { Icon: IconYoutube, label: "YouTube" },
 ] as const;
 
 export function Footer() {
   const ref = useRef(null);
   const inView = useInView(ref, { once: true, margin: "-40px" });
-  const [email, setEmail] = useState("");
-
-  function handleNewsletter(e: FormEvent) {
-    e.preventDefault();
-  }
 
   return (
     <motion.footer
@@ -71,121 +56,64 @@ export function Footer() {
       id="contact"
       initial={{ opacity: 0, y: 12 }}
       animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 12 }}
-      transition={{ duration: 0.6, ease: "easeOut" }}
-      className="border-t border-neutral-800 bg-neutral-950 px-4 py-12 text-white sm:px-6 lg:px-8 lg:py-16"
+      transition={{ duration: 0.5, ease: "easeOut" }}
+      className="border-t border-neutral-200 bg-white px-4 py-14 text-neutral-900 sm:px-6 lg:px-8"
     >
-      <div className="mx-auto grid max-w-7xl gap-12 lg:grid-cols-12 lg:gap-10">
-        <div className="lg:col-span-4">
-          <h2 className="text-lg font-bold tracking-tight text-white">
-            Schrijf je in voor de nieuwsbrief
-          </h2>
-          <p className="mt-3 text-sm leading-relaxed text-white/75">
-            Tips, nieuwe producten en aanbiedingen—compact in je inbox.
-          </p>
-          <form
-            onSubmit={handleNewsletter}
-            className="mt-6 flex w-full max-w-md flex-col overflow-hidden rounded-xl border border-neutral-600 bg-neutral-700 shadow-sm sm:flex-row"
-          >
-            <label htmlFor="footer-newsletter-email" className="sr-only">
-              E-mailadres
-            </label>
-            <input
-              id="footer-newsletter-email"
-              type="email"
-              autoComplete="email"
-              placeholder="Je e-mailadres"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="min-h-11 flex-1 border-0 bg-neutral-700 px-4 py-3 text-sm text-white placeholder:text-neutral-300 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white/25"
-            />
-            <button
-              type="submit"
-              className="min-h-11 shrink-0 rounded-none bg-white px-6 text-sm font-semibold text-neutral-900 transition-colors hover:bg-neutral-200"
-            >
-              Inschrijven
-            </button>
-          </form>
-        </div>
-
-        <div className="lg:col-span-3">
-          <p className="text-sm font-semibold text-white">Bezoek ons</p>
-          <address className="mt-4 not-italic text-sm leading-relaxed text-white/75">
-            128 Canal Street
-            <br />
-            Amsterdam, NL 1013 KE
-          </address>
-          <p className="mt-4 text-sm leading-relaxed text-white/75">
-            <span className="font-medium text-white">Openingstijden</span>
-            <br />
-            ma–za 10:00–18:00
-            <br />
-            zo gesloten
-          </p>
-          <p className="mt-4 text-sm">
-            <a
-              href="mailto:hello@fietshaven.com"
-              className="text-white/75 transition-colors hover:text-white"
-            >
-              hello@fietshaven.com
-            </a>
-            <br />
-            <a
-              href="tel:+31201234567"
-              className="text-white/75 transition-colors hover:text-white"
-            >
-              +31 20 123 4567
-            </a>
+      <div className="mx-auto flex max-w-7xl flex-col gap-12 lg:flex-row lg:items-start lg:justify-between">
+        <div>
+          <p className="text-sm font-semibold tracking-[0.3em] text-neutral-900">FIETS HAVEN</p>
+          <p className="mt-3 max-w-xs text-sm leading-relaxed text-neutral-600">
+            Elektrische fietsen en accessoires — eenvoudig bestellen via WhatsApp.
           </p>
         </div>
 
-        <div className="lg:col-span-2">
-          <p className="text-sm font-semibold text-white">Snel naar</p>
-          <ul className="mt-4 flex flex-col gap-2.5 text-sm text-white/75">
-            {quickLinks.map(({ label, to }) => (
-              <li key={to}>
-                <Link to={to} className="transition-colors hover:text-white">
-                  {label}
-                </Link>
-              </li>
-            ))}
-          </ul>
+        <div className="grid gap-10 sm:grid-cols-2 lg:gap-16">
+          <div>
+            <p className="text-xs font-medium tracking-widest text-neutral-500">Shop</p>
+            <ul className="mt-4 flex flex-col gap-2.5 text-sm text-neutral-700">
+              {quickLinks.map(({ label, to }) => (
+                <li key={to}>
+                  <Link to={to} className="transition-colors hover:text-neutral-900">
+                    {label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+          <div>
+            <p className="text-xs font-medium tracking-widest text-neutral-500">Beleid</p>
+            <ul className="mt-4 flex flex-col gap-2.5 text-sm text-neutral-700">
+              {policyLinks.map(({ label, to }) => (
+                <li key={to}>
+                  <Link to={to} className="transition-colors hover:text-neutral-900">
+                    {label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
         </div>
 
-        <div className="lg:col-span-2">
-          <p className="text-sm font-semibold text-white">Beleid</p>
-          <ul className="mt-4 flex flex-col gap-2.5 text-sm text-white/75">
-            {policyLinks.map(({ label, to }) => (
-              <li key={to}>
-                <Link to={to} className="transition-colors hover:text-white">
-                  {label}
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </div>
-
-        <div className="lg:col-span-1">
-          <p className="text-sm font-semibold text-white">Volg ons</p>
-          <div className="mt-4 grid grid-cols-2 gap-2">
+        <div className="flex flex-col gap-4">
+          <p className="text-xs font-medium tracking-widest text-neutral-500">Volg ons</p>
+          <div className="flex gap-2">
             {social.map(({ Icon, label }) => (
-              <motion.a
+              <a
                 key={label}
                 href="#"
                 aria-label={label}
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.97 }}
-                className="flex h-10 w-10 items-center justify-center rounded-xl bg-neutral-700 text-white shadow-sm ring-1 ring-neutral-600 transition-colors hover:bg-neutral-600"
+                className="flex h-9 w-9 items-center justify-center rounded-full border border-neutral-200 text-neutral-500 transition-colors hover:text-neutral-900"
               >
-                <Icon className="h-4 w-4" />
-              </motion.a>
+                <Icon className="h-3.5 w-3.5" />
+              </a>
             ))}
           </div>
         </div>
       </div>
 
-      <div className="mx-auto mt-12 max-w-7xl border-t border-neutral-700 pt-8">
-        <p className="text-center text-xs text-white/70">
-          © {new Date().getFullYear()} Fietshaven. Alle rechten voorbehouden.
+      <div className="mx-auto mt-12 max-w-7xl border-t border-neutral-200 pt-8">
+        <p className="text-center text-xs text-neutral-500">
+          © {new Date().getFullYear()} Fiets Haven. Alle rechten voorbehouden.
         </p>
       </div>
     </motion.footer>

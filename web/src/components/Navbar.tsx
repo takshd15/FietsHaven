@@ -3,7 +3,20 @@ import { Link, useLocation } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
 import { ChevronDown, Menu, Search, ShoppingCart, X } from "lucide-react";
 import { useCart } from "../context/CartContext.tsx";
+import { EASE, springTap } from "../lib/motion.ts";
 import { buildCartOrderMessage, openWhatsAppOrder } from "../lib/whatsapp.ts";
+
+const navList = {
+  hidden: {},
+  show: {
+    transition: { staggerChildren: 0.05, delayChildren: 0.08 },
+  },
+};
+
+const navItem = {
+  hidden: { opacity: 0, y: -8 },
+  show: { opacity: 1, y: 0, transition: { duration: 0.35, ease: EASE } },
+};
 
 const mainLinks = [
   { label: "Home", to: "/" },
@@ -70,17 +83,17 @@ export function Navbar() {
     openWhatsAppOrder(msg);
   }
 
-  const linkBase = "relative text-sm font-medium text-white/80 transition-colors hover:text-white";
-  const linkActive = "text-white";
+  const linkBase = "relative text-sm font-medium text-neutral-600 transition-colors hover:text-neutral-900";
+  const linkActive = "text-neutral-900";
 
   return (
     <motion.header
       initial={{ opacity: 0, y: -12 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.45, ease: "easeOut" }}
-      className="sticky top-0 z-50 border-b border-white/10 bg-black/95 backdrop-blur-md"
+      transition={{ duration: 0.45, ease: EASE }}
+      className="sticky top-0 z-50 border-b border-neutral-200/90 bg-white/95 backdrop-blur-md"
     >
-      <nav className="mx-auto flex h-20 max-w-7xl items-center justify-between gap-4 px-6 lg:px-8">
+      <nav className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-4 px-6 lg:px-8">
         {/* Logo */}
         <div className="flex min-w-0 flex-1 items-center gap-3 lg:flex-none">
           <button
@@ -89,47 +102,45 @@ export function Navbar() {
             aria-controls="mobile-nav"
             aria-label={mobileOpen ? "Menu sluiten" : "Menu openen"}
             onClick={() => setMobileOpen((o) => !o)}
-            className="rounded-xl p-2 text-white/80 transition-colors hover:bg-white/10 hover:text-white lg:hidden"
+            className="rounded-lg p-2 text-neutral-700 transition-colors hover:bg-neutral-100 hover:text-neutral-900 lg:hidden"
           >
             {mobileOpen ? <X className="h-6 w-6" strokeWidth={1.5} /> : <Menu className="h-6 w-6" strokeWidth={1.5} />}
           </button>
 
           <motion.div whileHover={{ opacity: 0.85 }} transition={{ duration: 0.2 }} className="min-w-0">
-            <Link to="/" className="flex min-w-0 items-center gap-2.5 text-white">
-              <img
-                src="/logo.jpeg"
-                alt="Fietshaven"
-                className="h-8 w-auto max-h-8 shrink-0 rounded-lg object-contain sm:h-9 md:h-10"
-                height={40}
-                width={120}
-              />
-              <span className="truncate text-lg font-bold tracking-tight text-white md:text-xl">
-                Fietshaven
+            <Link to="/" className="flex min-w-0 items-center gap-2.5 text-neutral-900">
+              <span className="truncate text-sm font-semibold tracking-[0.25em] md:text-base">
+                FIETS HAVEN
               </span>
             </Link>
           </motion.div>
         </div>
 
         {/* Desktop links */}
-        <ul className="absolute left-1/2 hidden -translate-x-1/2 items-center gap-1 lg:flex">
+        <motion.ul
+          className="absolute left-1/2 hidden -translate-x-1/2 items-center gap-1 lg:flex"
+          initial="hidden"
+          animate="show"
+          variants={navList}
+        >
           {mainLinks.map(({ label, to }) => {
             const active = isMainLinkActive(to, pathname, hash);
             return (
-              <li key={label}>
+              <motion.li key={label} variants={navItem}>
                 <Link
                   to={to}
                   className={`relative ${linkBase} rounded-xl px-3 py-2 ${active ? linkActive : ""}`}
                 >
                   {label}
                   {active ? (
-                    <span className="absolute -bottom-px left-3 right-3 h-0.5 rounded-full bg-white max-lg:hidden" />
+                    <span className="absolute -bottom-px left-3 right-3 h-px bg-neutral-900 max-lg:hidden" />
                   ) : null}
                 </Link>
-              </li>
+              </motion.li>
             );
           })}
 
-          <li ref={policiesRef} className="relative">
+          <motion.li ref={policiesRef} className="relative" variants={navItem}>
             <button
               type="button"
               aria-expanded={policiesOpen}
@@ -144,7 +155,7 @@ export function Navbar() {
                 aria-hidden
               />
               {policiesNavActive ? (
-                <span className="absolute -bottom-px left-3 right-3 h-0.5 rounded-full bg-white max-lg:hidden" />
+                <span className="absolute -bottom-px left-3 right-3 h-px bg-neutral-900 max-lg:hidden" />
               ) : null}
             </button>
 
@@ -154,16 +165,16 @@ export function Navbar() {
                   initial={{ opacity: 0, y: -6 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -6 }}
-                  transition={{ duration: 0.18 }}
-                  className="absolute left-0 top-full z-50 mt-1 min-w-[220px] rounded-2xl border border-white/15 bg-black py-2 shadow-xl"
+                  transition={{ duration: 0.2, ease: EASE }}
+                  className="absolute left-0 top-full z-50 mt-1 min-w-[220px] rounded-xl border border-neutral-200 bg-white py-2 shadow-sm"
                 >
                   {policyLinks.map(({ label, to }) => (
                     <Link
                       key={to}
                       to={to}
                       onClick={() => setPoliciesOpen(false)}
-                      className={`block px-4 py-2.5 text-sm font-medium transition-colors hover:bg-white/10 ${
-                        pathname === to ? "text-white" : "text-white/75 hover:text-white"
+                      className={`block px-4 py-2.5 text-sm font-medium transition-colors hover:bg-neutral-50 ${
+                        pathname === to ? "text-neutral-900" : "text-neutral-600 hover:text-neutral-900"
                       }`}
                     >
                       {label}
@@ -172,17 +183,18 @@ export function Navbar() {
                 </motion.div>
               ) : null}
             </AnimatePresence>
-          </li>
-        </ul>
+          </motion.li>
+        </motion.ul>
 
         {/* Icons */}
         <div className="flex shrink-0 items-center gap-3 sm:gap-4">
           <motion.button
             type="button"
             aria-label="Zoeken"
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            className="rounded-xl p-2 text-white/80 transition-colors hover:bg-white/10 hover:text-white"
+            whileHover={{ scale: 1.06 }}
+            whileTap={{ scale: 0.94 }}
+            transition={springTap}
+            className="rounded-lg p-2 text-neutral-600 transition-colors hover:bg-neutral-100 hover:text-neutral-900"
           >
             <Search className="h-5 w-5" strokeWidth={1.5} />
           </motion.button>
@@ -194,14 +206,15 @@ export function Navbar() {
                 ? `Winkelwagen, ${totalQuantity} producten — open WhatsApp om te bestellen`
                 : "Winkelwagen — open WhatsApp"
             }
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
+            whileHover={{ scale: 1.06 }}
+            whileTap={{ scale: 0.94 }}
+            transition={springTap}
             onClick={handleCartClick}
-            className="relative rounded-xl p-2 text-white/80 transition-colors hover:bg-white/10 hover:text-white"
+            className="relative rounded-lg p-2 text-neutral-600 transition-colors hover:bg-neutral-100 hover:text-neutral-900"
           >
             <ShoppingCart className="h-5 w-5" strokeWidth={1.5} />
             {totalQuantity > 0 ? (
-              <span className="absolute -right-0.5 -top-0.5 flex h-[1.125rem] min-w-[1.125rem] items-center justify-center rounded-full bg-white px-1 text-[10px] font-bold leading-none text-[#5c6370]">
+              <span className="absolute -right-0.5 -top-0.5 flex h-[1.125rem] min-w-[1.125rem] items-center justify-center rounded-full bg-neutral-900 px-1 text-[10px] font-semibold leading-none text-white">
                 {totalQuantity > 99 ? "99+" : totalQuantity}
               </span>
             ) : null}
@@ -217,8 +230,8 @@ export function Navbar() {
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
-            transition={{ duration: 0.25, ease: "easeOut" }}
-            className="relative overflow-hidden border-t border-white/10 bg-neutral-950 lg:hidden"
+            transition={{ duration: 0.28, ease: EASE }}
+            className="relative overflow-hidden border-t border-neutral-200 bg-white lg:hidden"
           >
             <div className="relative z-10 max-h-[min(70vh,calc(100dvh-5rem))] overflow-y-auto px-4 py-5">
               <ul className="flex flex-col gap-1">
@@ -228,8 +241,8 @@ export function Navbar() {
                     <li key={label}>
                       <Link
                         to={to}
-                        className={`block rounded-2xl px-4 py-3 text-base font-medium transition-colors ${
-                          active ? "bg-white/15 text-white" : "text-white/75 hover:bg-white/10 hover:text-white"
+                        className={`block rounded-xl px-4 py-3 text-base font-medium transition-colors ${
+                          active ? "bg-neutral-100 text-neutral-900" : "text-neutral-600 hover:bg-neutral-100 hover:text-neutral-900"
                         }`}
                         onClick={() => setMobileOpen(false)}
                       >
@@ -240,7 +253,7 @@ export function Navbar() {
                 })}
               </ul>
 
-              <p className="mt-4 px-4 text-[11px] font-semibold uppercase tracking-[0.2em] text-white/40">
+              <p className="mt-4 px-4 text-[11px] font-semibold uppercase tracking-[0.2em] text-neutral-400">
                 Beleid
               </p>
 
@@ -251,8 +264,8 @@ export function Navbar() {
                     <li key={to}>
                       <Link
                         to={to}
-                        className={`block rounded-2xl px-4 py-3 text-base font-medium transition-colors ${
-                          active ? "bg-white/15 text-white" : "text-white/75 hover:bg-white/10 hover:text-white"
+                        className={`block rounded-xl px-4 py-3 text-base font-medium transition-colors ${
+                          active ? "bg-neutral-100 text-neutral-900" : "text-neutral-600 hover:bg-neutral-100 hover:text-neutral-900"
                         }`}
                         onClick={() => setMobileOpen(false)}
                       >
