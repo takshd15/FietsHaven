@@ -58,6 +58,7 @@ const btnSecondary =
   "inline-flex min-h-10 w-full items-center justify-center rounded-2xl border border-gray-300 bg-white px-4 py-2.5 text-sm font-semibold text-gray-900 transition-colors hover:bg-gray-50";
 
 const bikesSectionBackdrop = publicAsset("home-bg-rider.png");
+const bikeCardBackdrop = publicAsset("home-bg-rider.png");
 
 export function HomePage() {
   const location = useLocation();
@@ -157,10 +158,22 @@ export function HomePage() {
               {bikesShowcase.map((bike) => (
                 <motion.li key={bike.slug} variants={staggerItem}>
                   <article
-                    className="flex h-full flex-col rounded-3xl p-1.5 ring-1 ring-gray-200 sm:p-2"
+                    className="relative flex h-full flex-col overflow-hidden rounded-3xl p-1.5 ring-1 ring-gray-200 sm:p-2"
                     style={{ backgroundColor: "var(--fh-surface)" }}
                   >
-                    <div className="overflow-hidden rounded-2xl">
+                    {/* Card background image + readability layer (same pattern as hero section) */}
+                    <div className="pointer-events-none absolute inset-0" aria-hidden>
+                      <img
+                        src={bikeCardBackdrop}
+                        alt=""
+                        className="h-full w-full object-cover object-[72%_44%] sm:object-[70%_46%] lg:object-[66%_46%]"
+                        loading="lazy"
+                        decoding="async"
+                      />
+                      <div className="absolute inset-0 bg-white/82" />
+                    </div>
+
+                    <div className="relative z-10 overflow-hidden rounded-2xl">
                       <BikeShowcaseCarousel
                         productLabel={bike.title}
                         images={bike.images}
@@ -169,7 +182,7 @@ export function HomePage() {
                       />
                     </div>
 
-                    <div className="mt-4 flex flex-1 flex-col px-2 pb-2">
+                    <div className="relative z-10 mt-4 flex flex-1 flex-col px-2 pb-2">
                       {/* Title + price */}
                       <Link
                         to={`/product/${bike.slug}`}
