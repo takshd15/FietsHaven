@@ -6,7 +6,6 @@ import { BikeShowcaseCarousel } from "../components/BikeShowcaseCarousel.tsx";
 import { Hero } from "../components/Hero.tsx";
 import { FeatureCard } from "../components/FeatureCard.tsx";
 import { products } from "../data/catalog.ts";
-import { publicAsset } from "../lib/publicAsset.ts";
 
 const easeOut = "easeOut" as const;
 
@@ -56,10 +55,6 @@ const btnPrimary =
 
 const btnSecondary =
   "inline-flex min-h-10 w-full items-center justify-center rounded-2xl border border-gray-300 bg-white px-4 py-2.5 text-sm font-semibold text-gray-900 transition-colors hover:bg-gray-50";
-
-const bikesSectionBackdrop = publicAsset("home-bg-rider.png");
-const bikeCardBackdrop = publicAsset("home-bg-rider.png");
-const accessoriesSectionBackdrop = publicAsset("accessories-bg-shop.png");
 
 export function HomePage() {
   const location = useLocation();
@@ -129,20 +124,11 @@ export function HomePage() {
         <section
           id="bikes"
           ref={bikesRef}
-          className={`relative overflow-hidden ${sectionPadX} py-14 sm:py-16 lg:py-20`}
+          className={`${sectionPadX} py-14 sm:py-16 lg:py-20`}
         >
-          <div className="pointer-events-none absolute inset-0" aria-hidden>
-            <img
-              src={bikesSectionBackdrop}
-              alt=""
-              className="h-full w-full object-cover object-[66%_44%] sm:object-[60%_46%] lg:object-center"
-              loading="eager"
-              decoding="async"
-            />
-          </div>
           <div className={container}>
             <motion.h2
-              className="relative z-10 text-center text-2xl font-bold tracking-tight text-gray-900 sm:text-3xl"
+              className="text-center text-2xl font-bold tracking-tight text-gray-900 sm:text-3xl"
               initial={{ opacity: 0, y: 12 }}
               animate={bikesInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 12 }}
               transition={{ duration: 0.45, ease: easeOut }}
@@ -151,7 +137,7 @@ export function HomePage() {
             </motion.h2>
 
             <motion.ul
-              className="relative z-10 mt-10 grid grid-cols-1 gap-8 sm:grid-cols-2 sm:gap-6 lg:mt-14 lg:grid-cols-3 lg:gap-8"
+              className="mt-10 grid grid-cols-1 gap-8 sm:grid-cols-2 sm:gap-6 lg:mt-14 lg:grid-cols-3 lg:gap-8"
               variants={staggerContainer}
               initial="hidden"
               animate={bikesInView ? "show" : "hidden"}
@@ -159,22 +145,10 @@ export function HomePage() {
               {bikesShowcase.map((bike) => (
                 <motion.li key={bike.slug} variants={staggerItem}>
                   <article
-                    className="relative flex h-full flex-col overflow-hidden rounded-3xl p-1.5 ring-1 ring-gray-200 sm:p-2"
+                    className="flex h-full flex-col overflow-hidden rounded-3xl p-1.5 ring-1 ring-gray-200 sm:p-2"
                     style={{ backgroundColor: "var(--fh-surface)" }}
                   >
-                    {/* Card background image + readability layer (same pattern as hero section) */}
-                    <div className="pointer-events-none absolute inset-0" aria-hidden>
-                      <img
-                        src={bikeCardBackdrop}
-                        alt=""
-                        className="h-full w-full object-cover object-[72%_44%] sm:object-[70%_46%] lg:object-[66%_46%]"
-                        loading="lazy"
-                        decoding="async"
-                      />
-                      <div className="absolute inset-0 bg-white/82" />
-                    </div>
-
-                    <div className="relative z-10 overflow-hidden rounded-2xl">
+                    <div className="overflow-hidden rounded-2xl">
                       <BikeShowcaseCarousel
                         productLabel={bike.title}
                         images={bike.images}
@@ -183,7 +157,7 @@ export function HomePage() {
                       />
                     </div>
 
-                    <div className="relative z-10 mt-4 flex flex-1 flex-col px-2 pb-2">
+                    <div className="mt-4 flex flex-1 flex-col px-2 pb-2">
                       {/* Title + price */}
                       <Link
                         to={`/product/${bike.slug}`}
@@ -228,7 +202,7 @@ export function HomePage() {
             </motion.ul>
 
             <motion.div
-              className="relative z-10 mt-12 flex justify-center sm:mt-14"
+              className="mt-12 flex justify-center sm:mt-14"
               initial={{ opacity: 0, y: 10 }}
               animate={bikesInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 10 }}
               transition={{ duration: 0.4, delay: 0.15, ease: easeOut }}
@@ -244,19 +218,10 @@ export function HomePage() {
         <section
           id="accessories"
           ref={accessoriesRef}
-          className={`relative overflow-hidden border-t border-white/10 ${sectionPadX} py-14 sm:py-16 lg:py-20`}
+          className={`border-t border-white/10 ${sectionPadX} py-14 sm:py-16 lg:py-20`}
           style={{ backgroundColor: "var(--fh-surface-lo)" }}
         >
-          <div className="pointer-events-none absolute inset-0" aria-hidden>
-            <img
-              src={accessoriesSectionBackdrop}
-              alt=""
-              className="h-full w-full object-cover object-[60%_50%] sm:object-[56%_50%] lg:object-center"
-              loading="lazy"
-              decoding="async"
-            />
-          </div>
-          <div className={`relative z-10 ${container}`}>
+          <div className={container}>
             <motion.h2
               className="text-2xl font-bold tracking-tight text-gray-900 sm:text-3xl"
               initial={{ opacity: 0, y: 10 }}

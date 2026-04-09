@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { ChevronDown, Menu, Search, ShoppingCart, X } from "lucide-react";
 import { useCart } from "../context/CartContext.tsx";
 import { buildCartOrderMessage, openWhatsAppOrder } from "../lib/whatsapp.ts";
+import { publicAsset } from "../lib/publicAsset.ts";
 
 const mainLinks = [
   { label: "Home", to: "/" },
@@ -19,6 +20,7 @@ const policyLinks = [
   { label: "Retourbeleid", to: "/policies/refund" },
   { label: "Beschadigde producten", to: "/policies/damaged" },
 ] as const;
+const mobileMenuBackdrop = publicAsset("home-bg-rider.png");
 
 function isHashLink(to: string): to is `/#${string}` {
   return to.startsWith("/#");
@@ -219,9 +221,18 @@ export function Navbar() {
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
             transition={{ duration: 0.25, ease: "easeOut" }}
-            className="border-t border-white/10 bg-[#5c6370] lg:hidden"
+            className="relative overflow-hidden border-t border-white/10 bg-[#5c6370] lg:hidden"
           >
-            <div className="max-h-[min(70vh,calc(100dvh-5rem))] overflow-y-auto px-4 py-5">
+            <div className="pointer-events-none absolute inset-0" aria-hidden>
+              <img
+                src={mobileMenuBackdrop}
+                alt=""
+                className="h-full w-full object-cover object-[60%_44%] opacity-24"
+                loading="lazy"
+                decoding="async"
+              />
+            </div>
+            <div className="relative z-10 max-h-[min(70vh,calc(100dvh-5rem))] overflow-y-auto px-4 py-5">
               <ul className="flex flex-col gap-1">
                 {mainLinks.map(({ label, to }) => {
                   const active = isMainLinkActive(to, pathname, hash);

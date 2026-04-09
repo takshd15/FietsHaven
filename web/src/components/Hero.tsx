@@ -10,7 +10,7 @@ const heroBikeSlides = [
   { src: publicAsset("hero/dubbele-accu.jpeg"), alt: "Elektrische fiets met dubbele accu" },
   { src: publicAsset("hero/mini.jpeg"), alt: "Elektrische fiets Mini" },
 ] as const;
-const heroSectionBackdrop = publicAsset("home-bg-alt-bike.png");
+const heroCardBackdrop = publicAsset("home-bg-rider.png");
 
 const heroHeading = {
   hidden: { opacity: 0, y: 24, scale: 0.98 },
@@ -196,9 +196,9 @@ export function Hero() {
       <div className="relative mx-auto max-w-7xl overflow-hidden rounded-2xl bg-gradient-to-br from-[#7a8494] via-[#6d7784] to-[#5c6370] shadow-lg ring-1 ring-white/15 sm:rounded-3xl">
         <div className="pointer-events-none absolute inset-0" aria-hidden>
           <img
-            src={heroSectionBackdrop}
+            src={heroCardBackdrop}
             alt=""
-            className="h-full w-full object-cover object-[58%_40%] opacity-24 sm:object-[56%_45%] lg:object-center"
+            className="h-full w-full object-cover object-[62%_40%] opacity-24 sm:object-[58%_44%] lg:object-center"
             loading="eager"
             decoding="async"
           />
