@@ -59,6 +59,7 @@ const btnSecondary =
 
 const bikesSectionBackdrop = publicAsset("home-bg-rider.png");
 const bikeCardBackdrop = publicAsset("home-bg-rider.png");
+const accessoriesSectionBackdrop = publicAsset("accessories-bg-shop.png");
 
 export function HomePage() {
   const location = useLocation();
@@ -243,10 +244,19 @@ export function HomePage() {
         <section
           id="accessories"
           ref={accessoriesRef}
-          className={`border-t border-white/10 ${sectionPadX} py-14 sm:py-16 lg:py-20`}
+          className={`relative overflow-hidden border-t border-white/10 ${sectionPadX} py-14 sm:py-16 lg:py-20`}
           style={{ backgroundColor: "var(--fh-surface-lo)" }}
         >
-          <div className={container}>
+          <div className="pointer-events-none absolute inset-0" aria-hidden>
+            <img
+              src={accessoriesSectionBackdrop}
+              alt=""
+              className="h-full w-full object-cover object-[60%_50%] sm:object-[56%_50%] lg:object-center"
+              loading="lazy"
+              decoding="async"
+            />
+          </div>
+          <div className={`relative z-10 ${container}`}>
             <motion.h2
               className="text-2xl font-bold tracking-tight text-gray-900 sm:text-3xl"
               initial={{ opacity: 0, y: 10 }}
