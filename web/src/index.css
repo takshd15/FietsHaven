@@ -1,3 +1,4 @@
+@import url("https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800&display=swap");
 @import "tailwindcss";
 
 html {
@@ -24,10 +25,17 @@ html {
 
 body {
   margin: 0;
-  font-family: Inter, system-ui, -apple-system, sans-serif;
+  font-family: "Playfair Display", Georgia, "Times New Roman", serif;
   -webkit-font-smoothing: antialiased;
   background-color: var(--fh-bg);
   color: var(--fh-text);
+}
+
+button,
+input,
+textarea,
+select {
+  font-family: inherit;
 }
 
 /* ── Page/section backgrounds ──────────────── */
