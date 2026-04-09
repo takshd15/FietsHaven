@@ -25,16 +25,16 @@ export class ErrorBoundary extends Component<Props, State> {
       return (
         <div className="flex min-h-screen flex-col items-center justify-center bg-neutral-100 px-6 text-center">
           <p className="text-sm font-semibold uppercase tracking-wide text-gray-500">
-            Something went wrong
+            Er ging iets mis
           </p>
           <h1 className="mt-3 text-2xl font-bold text-gray-900">
-            Please refresh or return home
+            Vernieuw de pagina of ga terug naar home
           </h1>
           <Link
             to="/"
             className="mt-8 inline-flex rounded-lg bg-gray-900 px-6 py-3 text-sm font-semibold text-white hover:bg-black"
           >
-            Back to Fiets Haven
+            Naar FietsHaven
           </Link>
         </div>
       );

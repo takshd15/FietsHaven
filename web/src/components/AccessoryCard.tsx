@@ -24,10 +24,10 @@ export function AccessoryCard({
   description,
   imageSrc,
   imageAlt,
-  buttonLabel = "Buy now",
+  buttonLabel = "Nu kopen",
   buttonStyle = "dark",
   showcaseFooter,
-  showcaseButtonLabel = "Buy now",
+  showcaseButtonLabel = "Nu kopen",
   showcaseButtonStyle = "dark",
   variants,
 }: AccessoryCardProps) {
@@ -54,7 +54,7 @@ export function AccessoryCard({
             ) : (
               <div className="flex h-full items-center justify-center bg-gradient-to-br from-gray-200 to-gray-300">
                 <span className="text-xs font-medium uppercase tracking-widest text-gray-500">
-                  Image
+                  Afbeelding
                 </span>
               </div>
             )}

@@ -1,7 +1,16 @@
-import { motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
+import { ChevronLeft, ChevronRight } from "lucide-react";
+import { useCallback, useEffect, useRef, useState, type TouchEvent } from "react";
 import { Link } from "react-router-dom";
+import { publicAsset } from "../lib/publicAsset.ts";
 
 const easeOut = "easeOut" as const;
+
+const heroBikeSlides = [
+  { src: publicAsset("hero/v20-pro.jpeg"), alt: "Elektrische fiets v20 Pro" },
+  { src: publicAsset("hero/dubbele-accu.jpeg"), alt: "Elektrische fiets met dubbele accu" },
+  { src: publicAsset("hero/mini.jpeg"), alt: "Elektrische fiets Mini" },
+] as const;
 
 const heroHeading = {
   hidden: { opacity: 0, y: 24, scale: 0.98 },
@@ -40,25 +49,142 @@ const heroButton = {
 };
 
 const btnPrimary =
-  "inline-flex min-h-11 items-center justify-center rounded-md bg-zinc-900 px-7 text-sm font-semibold text-white shadow-sm transition-opacity hover:opacity-90";
+  "inline-flex min-h-11 items-center justify-center rounded-2xl bg-white px-7 text-sm font-semibold text-[#4a5260] shadow-sm transition-all hover:scale-[1.01] hover:bg-white/90";
 const btnSecondary =
-  "inline-flex min-h-11 items-center justify-center rounded-md bg-white/10 px-7 text-sm font-semibold text-white ring-1 ring-white/20 backdrop-blur-sm transition-opacity hover:opacity-90";
+  "inline-flex min-h-11 items-center justify-center rounded-2xl border border-white/60 bg-white px-7 text-sm font-semibold text-[#4a5260] shadow-sm transition-all hover:scale-[1.01] hover:bg-white/90";
 
-const HERO_IMG = "/bike.jpeg";
+const SLIDE_INTERVAL_MS = 2500;
+
+/** Full-bleed within the hero card; square on small screens to match product shots */
+const heroImgClass =
+  "absolute inset-0 h-full w-full object-contain object-center drop-shadow-[0_20px_48px_rgba(0,0,0,0.5)] sm:drop-shadow-[0_28px_56px_rgba(0,0,0,0.55)]";
+
+const heroImgSizes =
+  "(min-width: 1280px) 640px, (min-width: 1024px) 48vw, 100vw";
 
 function HeroImage() {
+  const [index, setIndex] = useState(0);
+  const [tabHidden, setTabHidden] = useState(
+    () => typeof document !== "undefined" && document.hidden,
+  );
+  const touchStartX = useRef<number | null>(null);
+  const len = heroBikeSlides.length;
+
+  const goPrev = useCallback(() => {
+    setIndex((i) => (i - 1 + len) % len);
+  }, [len]);
+
+  const goNext = useCallback(() => {
+    setIndex((i) => (i + 1) % len);
+  }, [len]);
+
+  const goNextRef = useRef(goNext);
+  goNextRef.current = goNext;
+
+  useEffect(() => {
+    const onVis = () => setTabHidden(document.hidden);
+    document.addEventListener("visibilitychange", onVis);
+    return () => document.removeEventListener("visibilitychange", onVis);
+  }, []);
+
+  useEffect(() => {
+    if (tabHidden) return;
+    const id = window.setInterval(() => goNextRef.current(), SLIDE_INTERVAL_MS);
+    return () => window.clearInterval(id);
+  }, [tabHidden]);
+
+  const onTouchStart = (e: TouchEvent) => {
+    touchStartX.current = e.touches[0].clientX;
+  };
+
+  const onTouchEnd = (e: TouchEvent) => {
+    if (touchStartX.current == null) return;
+    const endX = e.changedTouches[0].clientX;
+    const dx = endX - touchStartX.current;
+    touchStartX.current = null;
+    if (dx > 48) goPrev();
+    else if (dx < -48) goNext();
+  };
+
   return (
-    <div className="relative min-h-[280px] lg:min-h-[460px] xl:min-h-[500px]">
-      <div className="pointer-events-none absolute inset-0 z-10 bg-gradient-to-l from-transparent via-transparent to-black/30 lg:to-black/40" />
-      <div className="relative flex h-full min-h-[280px] w-full items-center justify-center px-4 py-8 sm:px-6 sm:py-10 lg:min-h-[460px] lg:py-12">
-        <img
-          src={HERO_IMG}
-          alt="Fiets Haven Urban E-Bike"
-          className="h-auto w-full max-w-2xl object-contain object-center drop-shadow-[0_28px_56px_rgba(0,0,0,0.55)] sm:max-h-[min(88vh,520px)] sm:max-w-none lg:max-h-[min(86vh,600px)]"
-          width={800}
-          height={600}
-          decoding="async"
-        />
+    <div
+      className="relative flex min-h-0 w-full flex-1 flex-col lg:min-h-[480px]"
+      onTouchStart={onTouchStart}
+      onTouchEnd={onTouchEnd}
+    >
+      <div className="pointer-events-none absolute inset-0 z-10 bg-gradient-to-l from-transparent via-transparent to-[#5c6370]/40 lg:to-[#5c6370]/50" />
+      <div
+        className="relative w-full overflow-hidden px-0 pt-0 pb-[max(0.75rem,env(safe-area-inset-bottom))] lg:py-0"
+        role="region"
+        aria-roledescription="carousel"
+        aria-label="Uitgelichte fietsen"
+      >
+        {/* Square viewport on mobile = full card width; desktop fills column height */}
+        <div className="relative aspect-square w-full max-w-none min-h-0 lg:aspect-auto lg:min-h-[min(52vh,560px)] lg:flex-1 xl:min-h-[min(56vh,600px)]">
+          <AnimatePresence initial={false} mode="wait">
+            <motion.img
+              key={heroBikeSlides[index].src}
+              src={heroBikeSlides[index].src}
+              alt={heroBikeSlides[index].alt}
+              width={1080}
+              height={1080}
+              sizes={heroImgSizes}
+              fetchPriority={index === 0 ? "high" : "low"}
+              decoding="async"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.45, ease: easeOut }}
+              className={heroImgClass}
+              draggable={false}
+            />
+          </AnimatePresence>
+        </div>
+
+        <div className="pointer-events-none absolute inset-y-0 left-0 right-0 z-20 flex items-center justify-between px-1.5 sm:px-3 lg:px-4">
+          <button
+            type="button"
+            onClick={(e) => {
+              e.preventDefault();
+              goPrev();
+            }}
+            className="pointer-events-auto flex h-10 w-10 min-h-[44px] min-w-[44px] shrink-0 items-center justify-center rounded-full border border-white/30 bg-white/15 text-white shadow-md backdrop-blur-sm transition-colors hover:bg-white/25 sm:h-10 sm:w-10"
+            aria-label="Vorige fiets"
+          >
+            <ChevronLeft className="h-5 w-5 sm:h-6 sm:w-6" strokeWidth={2} />
+          </button>
+          <button
+            type="button"
+            onClick={(e) => {
+              e.preventDefault();
+              goNext();
+            }}
+            className="pointer-events-auto flex h-10 w-10 min-h-[44px] min-w-[44px] shrink-0 items-center justify-center rounded-full border border-white/30 bg-white/15 text-white shadow-md backdrop-blur-sm transition-colors hover:bg-white/25 sm:h-10 sm:w-10"
+            aria-label="Volgende fiets"
+          >
+            <ChevronRight className="h-5 w-5 sm:h-6 sm:w-6" strokeWidth={2} />
+          </button>
+        </div>
+
+        <div className="pointer-events-none absolute bottom-3 left-0 right-0 z-20 flex justify-center gap-1 sm:bottom-4">
+          {heroBikeSlides.map((_, i) => (
+            <button
+              key={heroBikeSlides[i].src}
+              type="button"
+              onClick={() => setIndex(i)}
+              className="pointer-events-auto flex min-h-[44px] min-w-[44px] items-center justify-center p-2"
+              aria-label={`Ga naar dia ${i + 1} van ${len}`}
+              aria-current={i === index}
+            >
+              <span
+                className={`block rounded-full transition-all ${
+                  i === index ? "h-1.5 w-6 bg-white" : "h-1.5 w-1.5 bg-white/35 hover:bg-white/60"
+                }`}
+                aria-hidden
+              />
+            </button>
+          ))}
+        </div>
       </div>
     </div>
   );
@@ -67,7 +193,7 @@ function HeroImage() {
 export function Hero() {
   return (
     <section id="home" className="px-4 pb-12 pt-8 sm:px-6 lg:px-8 lg:pb-16 lg:pt-10">
-      <div className="mx-auto max-w-7xl overflow-hidden rounded-lg bg-gradient-to-br from-zinc-800 via-neutral-900 to-black shadow-lg ring-1 ring-black/20 sm:rounded-xl">
+      <div className="mx-auto max-w-7xl overflow-hidden rounded-2xl bg-gradient-to-br from-[#7a8494] via-[#6d7784] to-[#5c6370] shadow-lg ring-1 ring-white/15 sm:rounded-3xl">
         <div className="grid gap-0 lg:grid-cols-[1fr_1.05fr] lg:items-stretch">
           <div className="order-2 flex flex-col justify-center px-6 py-10 sm:px-10 sm:py-12 lg:order-1 lg:py-16 lg:pl-12 lg:pr-6 xl:pl-14">
             <div className="max-w-xl">
@@ -77,15 +203,15 @@ export function Hero() {
                 animate="visible"
                 className="text-3xl font-bold leading-[1.08] tracking-tight text-white sm:text-4xl lg:text-5xl xl:text-[3.25rem]"
               >
-                Discover your perfect ride
+                Ontdek jouw perfecte rit
               </motion.h1>
               <motion.p
                 variants={heroSub}
                 initial="hidden"
                 animate="visible"
-                className="mt-4 text-base font-normal leading-relaxed text-zinc-300 sm:text-lg"
+                className="mt-4 text-base font-normal leading-relaxed text-white/75 sm:text-lg"
               >
-                Explore our collection of high-performance bikes.
+                Ontdek onze collectie van hoogwaardige fietsen.
               </motion.p>
             </div>
 
@@ -103,7 +229,7 @@ export function Hero() {
                     whileTap={{ scale: 0.98 }}
                     transition={{ duration: 0.2, ease: easeOut }}
                   >
-                    Shop bikes
+                    Bekijk fietsen
                   </motion.span>
                 </Link>
               </motion.div>
@@ -115,14 +241,14 @@ export function Hero() {
                     transition={{ duration: 0.2, ease: easeOut }}
                     className="inline-flex"
                   >
-                    Learn more
+                    Meer informatie
                   </motion.span>
                 </Link>
               </motion.div>
             </motion.div>
           </div>
 
-          <div className="order-1 min-h-[240px] lg:order-2 lg:min-h-0">
+          <div className="order-1 flex min-h-0 w-full flex-col lg:order-2 lg:h-full lg:min-h-0">
             <HeroImage />
           </div>
         </div>

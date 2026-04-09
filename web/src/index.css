@@ -4,10 +4,156 @@ html {
   scroll-behavior: smooth;
 }
 
+/* ──────────────────────────────────────────────
+   FietsHaven brand theme
+   Logo palette: #6b7280 background, white text
+   ────────────────────────────────────────────── */
+:root {
+  --fh-bg:          #6b7280;   /* page background */
+  --fh-surface:     #7a8494;   /* cards, panels */
+  --fh-surface-lo:  #5c6370;   /* navbar, footer, lower panels */
+  --fh-surface-hi:  #8a95a6;   /* lighter card highlight */
+  --fh-border:      rgba(255,255,255,0.18);
+  --fh-border-soft: rgba(255,255,255,0.10);
+  --fh-text:        #ffffff;
+  --fh-text-soft:   rgba(255,255,255,0.78);
+  --fh-text-muted:  rgba(255,255,255,0.52);
+  --fh-accent:      #ffffff;   /* primary button bg */
+  --fh-accent-text: #3d4452;   /* primary button text */
+}
+
 body {
   margin: 0;
   font-family: Inter, system-ui, -apple-system, sans-serif;
   -webkit-font-smoothing: antialiased;
-  background-color: #fafafa;
-  color: #111827;
+  background-color: var(--fh-bg);
+  color: var(--fh-text);
+}
+
+/* ── Page/section backgrounds ──────────────── */
+.bg-\[\#fafafa\],
+.bg-\[\#f4f4f5\],
+.bg-white,
+.bg-gray-50,
+.bg-gray-100,
+.bg-neutral-100,
+.bg-neutral-100\/90,
+.bg-neutral-200\/80 {
+  background-color: var(--fh-surface) !important;
+}
+
+/* Keep intended white CTA/button backgrounds truly white */
+button.bg-white,
+a.inline-flex.bg-white {
+  background-color: var(--fh-accent) !important;
+  color: var(--fh-accent-text) !important;
+}
+
+/* Cards / elevated surfaces */
+.bg-neutral-800\/40,
+.bg-neutral-800\/50 {
+  background-color: var(--fh-surface-lo) !important;
+}
+
+/* ── Typography ────────────────────────────── */
+.text-gray-900,
+.text-gray-800,
+.text-gray-700,
+.text-neutral-900,
+.text-neutral-800,
+.text-neutral-700,
+.text-zinc-300,
+.text-black {
+  color: var(--fh-text) !important;
+}
+
+.text-gray-600,
+.text-gray-500,
+.text-neutral-600,
+.text-neutral-500,
+.text-neutral-400,
+.text-neutral-300 {
+  color: var(--fh-text-soft) !important;
+}
+
+.text-gray-400,
+.text-zinc-400 {
+  color: var(--fh-text-muted) !important;
+}
+
+/* ── Borders & rings ───────────────────────── */
+.border-gray-100,
+.border-gray-200,
+.border-gray-200\/80,
+.border-gray-200\/90,
+.border-gray-300,
+.border-neutral-200,
+.border-neutral-700,
+.border-y,
+.border-t,
+.border-b {
+  border-color: var(--fh-border) !important;
+}
+
+.ring-gray-200\/70,
+.ring-gray-200\/80,
+.ring-gray-200\/85,
+.ring-gray-200\/90,
+.ring-neutral-700\/80,
+.ring-black\/20,
+.ring-black\/5 {
+  --tw-ring-color: var(--fh-border) !important;
+}
+
+/* ── Interactive buttons ───────────────────── */
+/* Primary dark button → white pill */
+.bg-gray-900,
+.bg-zinc-900,
+.bg-black {
+  background-color: var(--fh-accent) !important;
+  color: var(--fh-accent-text) !important;
+}
+
+.hover\:bg-black:hover,
+.hover\:bg-gray-900:hover {
+  background-color: rgba(255,255,255,0.88) !important;
+}
+
+/* Outline/secondary button */
+.border-gray-300 {
+  border-color: var(--fh-border) !important;
+}
+
+/* ── Hover states ──────────────────────────── */
+.hover\:bg-gray-50:hover,
+.hover\:bg-gray-100:hover,
+.hover\:bg-neutral-200:hover,
+.hover\:bg-white:hover {
+  background-color: rgba(255,255,255,0.14) !important;
+}
+
+.hover\:text-gray-900:hover {
+  color: var(--fh-text) !important;
+}
+
+/* ── Smooth borders ────────────────────────── */
+.rounded-md  { border-radius: 0.75rem; }
+.rounded-lg  { border-radius: 1rem; }
+.rounded-xl  { border-radius: 1.25rem; }
+.rounded-2xl { border-radius: 1.5rem; }
+
+/* ── Misc fills (stars, badges) ────────────── */
+.fill-gray-200 { fill: rgba(255,255,255,0.25) !important; }
+.text-gray-200 { color: rgba(255,255,255,0.25) !important; }
+
+/* white/80 backdrop inputs */
+.bg-white\/90,
+.bg-white\/95,
+.bg-white\/98 {
+  background-color: rgba(255,255,255,0.12) !important;
+}
+
+/* placeholder text */
+input::placeholder {
+  color: var(--fh-text-muted) !important;
 }

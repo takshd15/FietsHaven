@@ -2,16 +2,16 @@ import { useEffect } from "react";
 import { useLocation } from "react-router-dom";
 
 const STATIC_TITLES: Record<string, string> = {
-  "/": "Fiets Haven — Electric bikes & accessories",
-  "/faq": "FAQ — Fiets Haven",
-  "/contact": "Contact — Fiets Haven",
-  "/policies": "Policies — Fiets Haven",
-  "/policies/ordering": "Ordering & delivery — Fiets Haven",
-  "/policies/refund": "Refund policy — Fiets Haven",
-  "/policies/damaged": "Damaged products — Fiets Haven",
+  "/": "FietsHaven — Elektrische fietsen & accessoires",
+  "/faq": "Veelgestelde vragen — FietsHaven",
+  "/contact": "Contact — FietsHaven",
+  "/policies": "Beleid — FietsHaven",
+  "/policies/ordering": "Bestellen & levering — FietsHaven",
+  "/policies/refund": "Retourbeleid — FietsHaven",
+  "/policies/damaged": "Beschadigde producten — FietsHaven",
 };
 
-const DEFAULT_TITLE = "Fiets Haven — Electric bikes & accessories";
+const DEFAULT_TITLE = "FietsHaven — Elektrische fietsen & accessoires";
 
 /**
  * Sets document title for static routes. Product pages set their own title in ProductDetail.

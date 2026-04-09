@@ -4,17 +4,17 @@ import { Link } from "react-router-dom";
 
 const quickLinks = [
   { label: "Home", to: "/" },
-  { label: "Bikes", to: "/#bikes" },
-  { label: "Accessories", to: "/#accessories" },
+  { label: "Fietsen", to: "/#bikes" },
+  { label: "Accessoires", to: "/#accessories" },
   { label: "FAQ", to: "/faq" },
   { label: "Contact", to: "/contact" },
 ] as const;
 
 const policyLinks = [
-  { label: "Policies overview", to: "/policies" },
-  { label: "Ordering & delivery", to: "/policies/ordering" },
-  { label: "Refund policy", to: "/policies/refund" },
-  { label: "Damaged products", to: "/policies/damaged" },
+  { label: "Beleidsoverzicht", to: "/policies" },
+  { label: "Bestellen & levering", to: "/policies/ordering" },
+  { label: "Retourbeleid", to: "/policies/refund" },
+  { label: "Beschadigde producten", to: "/policies/damaged" },
 ] as const;
 
 function IconFacebook({ className }: { className?: string }) {
@@ -51,7 +51,7 @@ function IconYoutube({ className }: { className?: string }) {
 
 const social = [
   { Icon: IconFacebook, label: "Facebook" },
-  { Icon: IconTwitter, label: "Twitter" },
+  { Icon: IconTwitter, label: "X" },
   { Icon: IconInstagram, label: "Instagram" },
   { Icon: IconYoutube, label: "YouTube" },
 ] as const;
@@ -72,66 +72,66 @@ export function Footer() {
       initial={{ opacity: 0, y: 12 }}
       animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 12 }}
       transition={{ duration: 0.6, ease: "easeOut" }}
-      className="border-t border-gray-200/90 bg-gray-100 px-4 py-12 sm:px-6 lg:px-8 lg:py-16"
+      className="border-t border-neutral-700 bg-neutral-800 px-4 py-12 text-white sm:px-6 lg:px-8 lg:py-16"
     >
       <div className="mx-auto grid max-w-7xl gap-12 lg:grid-cols-12 lg:gap-10">
         <div className="lg:col-span-4">
-          <h2 className="text-lg font-bold tracking-tight text-gray-900">
-            Join our newsletter
+          <h2 className="text-lg font-bold tracking-tight text-white">
+            Schrijf je in voor de nieuwsbrief
           </h2>
-          <p className="mt-3 text-sm leading-relaxed text-gray-600">
-            Get the latest updates on new bike gear and exclusive offers.
+          <p className="mt-3 text-sm leading-relaxed text-neutral-300">
+            Tips, nieuwe producten en aanbiedingen—compact in je inbox.
           </p>
           <form
             onSubmit={handleNewsletter}
-            className="mt-6 flex w-full max-w-md flex-col overflow-hidden rounded-md border border-gray-200 bg-white shadow-sm sm:flex-row"
+            className="mt-6 flex w-full max-w-md flex-col overflow-hidden rounded-xl border border-neutral-600 bg-neutral-700 shadow-sm sm:flex-row"
           >
             <label htmlFor="footer-newsletter-email" className="sr-only">
-              Email
+              E-mailadres
             </label>
             <input
               id="footer-newsletter-email"
               type="email"
               autoComplete="email"
-              placeholder="Enter your email"
+              placeholder="Je e-mailadres"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="min-h-11 flex-1 border-0 bg-white px-4 py-3 text-sm text-gray-900 placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-zinc-900/15"
+              className="min-h-11 flex-1 border-0 bg-neutral-700 px-4 py-3 text-sm text-white placeholder:text-neutral-300 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white/25"
             />
             <button
               type="submit"
-              className="min-h-11 shrink-0 bg-zinc-900 px-6 text-sm font-semibold text-white transition-opacity hover:opacity-90"
+              className="min-h-11 shrink-0 rounded-none bg-white px-6 text-sm font-semibold text-neutral-900 transition-colors hover:bg-neutral-200"
             >
-              Subscribe
+              Inschrijven
             </button>
           </form>
         </div>
 
         <div className="lg:col-span-3">
-          <p className="text-sm font-semibold text-gray-900">Visit us</p>
-          <address className="mt-4 not-italic text-sm leading-relaxed text-gray-600">
+          <p className="text-sm font-semibold text-white">Bezoek ons</p>
+          <address className="mt-4 not-italic text-sm leading-relaxed text-neutral-300">
             128 Canal Street
             <br />
             Amsterdam, NL 1013 KE
           </address>
-          <p className="mt-4 text-sm leading-relaxed text-gray-600">
-            <span className="font-medium text-gray-800">Opening hours</span>
+          <p className="mt-4 text-sm leading-relaxed text-neutral-300">
+            <span className="font-medium text-white">Openingstijden</span>
             <br />
-            Mon–Sat 10:00–18:00
+            ma–za 10:00–18:00
             <br />
-            Sun closed
+            zo gesloten
           </p>
           <p className="mt-4 text-sm">
             <a
               href="mailto:hello@fietshaven.com"
-              className="text-gray-600 transition-colors hover:text-gray-900"
+              className="text-neutral-300 transition-colors hover:text-white"
             >
               hello@fietshaven.com
             </a>
             <br />
             <a
               href="tel:+31201234567"
-              className="text-gray-600 transition-colors hover:text-gray-900"
+              className="text-neutral-300 transition-colors hover:text-white"
             >
               +31 20 123 4567
             </a>
@@ -139,11 +139,11 @@ export function Footer() {
         </div>
 
         <div className="lg:col-span-2">
-          <p className="text-sm font-semibold text-gray-900">Quick links</p>
-          <ul className="mt-4 flex flex-col gap-2.5 text-sm text-gray-600">
+          <p className="text-sm font-semibold text-white">Snel naar</p>
+          <ul className="mt-4 flex flex-col gap-2.5 text-sm text-neutral-300">
             {quickLinks.map(({ label, to }) => (
               <li key={to}>
-                <Link to={to} className="transition-colors hover:text-gray-900">
+                <Link to={to} className="transition-colors hover:text-white">
                   {label}
                 </Link>
               </li>
@@ -152,11 +152,11 @@ export function Footer() {
         </div>
 
         <div className="lg:col-span-2">
-          <p className="text-sm font-semibold text-gray-900">Policies</p>
-          <ul className="mt-4 flex flex-col gap-2.5 text-sm text-gray-600">
+          <p className="text-sm font-semibold text-white">Beleid</p>
+          <ul className="mt-4 flex flex-col gap-2.5 text-sm text-neutral-300">
             {policyLinks.map(({ label, to }) => (
               <li key={to}>
-                <Link to={to} className="transition-colors hover:text-gray-900">
+                <Link to={to} className="transition-colors hover:text-white">
                   {label}
                 </Link>
               </li>
@@ -165,7 +165,7 @@ export function Footer() {
         </div>
 
         <div className="lg:col-span-1">
-          <p className="text-sm font-semibold text-gray-900">Follow us</p>
+          <p className="text-sm font-semibold text-white">Volg ons</p>
           <div className="mt-4 grid grid-cols-2 gap-2">
             {social.map(({ Icon, label }) => (
               <motion.a
@@ -174,7 +174,7 @@ export function Footer() {
                 aria-label={label}
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.97 }}
-                className="flex h-10 w-10 items-center justify-center rounded-md bg-white text-gray-800 shadow-sm ring-1 ring-gray-200/90 transition-colors hover:bg-gray-50"
+                className="flex h-10 w-10 items-center justify-center rounded-xl bg-neutral-700 text-white shadow-sm ring-1 ring-neutral-600 transition-colors hover:bg-neutral-600"
               >
                 <Icon className="h-4 w-4" />
               </motion.a>
@@ -183,9 +183,9 @@ export function Footer() {
         </div>
       </div>
 
-      <div className="mx-auto mt-12 max-w-7xl border-t border-gray-200/90 pt-8">
-        <p className="text-center text-xs text-gray-500">
-          © {new Date().getFullYear()} Fiets Haven. All rights reserved.
+      <div className="mx-auto mt-12 max-w-7xl border-t border-neutral-700 pt-8">
+        <p className="text-center text-xs text-neutral-300">
+          © {new Date().getFullYear()} FietsHaven. Alle rechten voorbehouden.
         </p>
       </div>
     </motion.footer>

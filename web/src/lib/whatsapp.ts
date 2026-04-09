@@ -17,11 +17,11 @@ export function buildProductOrderMessage(
 
   if (isAccessoryProduct(slug)) {
     return qty > 1
-      ? `Hi, I'd like to order: ${line}. Please confirm availability.`
-      : `Hi, I'd like to order the ${title} (${price}).`;
+      ? `Hoi, ik wil graag bestellen: ${line}. Kun je bevestigen of het beschikbaar is?`
+      : `Hoi, ik wil graag de ${title} (${price}) bestellen.`;
   }
 
-  return `Hi, I'm interested in buying ${line}. Is it available? I'd like to place an order.`;
+  return `Hoi, ik heb interesse in ${line}. Is het beschikbaar? Ik wil graag bestellen.`;
 }
 
 export function buildWhatsAppUrl(encodedMessage: string): string {
@@ -41,7 +41,7 @@ export type CartLineBrief = {
 
 export function buildCartOrderMessage(lines: CartLineBrief[]): string {
   if (lines.length === 0) {
-    return "Hi, I'd like to place an order on Fiets Haven.";
+    return "Hoi, ik wil graag een bestelling plaatsen bij FietsHaven.";
   }
   const body = lines
     .map((l) => {
@@ -49,5 +49,5 @@ export function buildCartOrderMessage(lines: CartLineBrief[]): string {
       return `• ${l.title} (${l.price})${q}`;
     })
     .join("\n");
-  return `Hi, I'd like to order the following from Fiets Haven:\n\n${body}\n\nPlease confirm availability and next steps.`;
+  return `Hoi, ik wil het volgende bestellen bij FietsHaven:\n\n${body}\n\nKun je beschikbaarheid en de vervolgstappen bevestigen?`;
 }

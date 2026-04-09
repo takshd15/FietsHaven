@@ -1,7 +1,7 @@
 import { motion, useInView, type Variants } from "framer-motion";
 import { useEffect, useRef } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { Headphones, Shield, Truck } from "lucide-react";
+import { ChevronDown, Headphones, Shield, Truck } from "lucide-react";
 import { BikeShowcaseCarousel } from "../components/BikeShowcaseCarousel.tsx";
 import { Hero } from "../components/Hero.tsx";
 import { FeatureCard } from "../components/FeatureCard.tsx";
@@ -37,37 +37,33 @@ const bikesShowcase = showcaseSlugs
 
 const accessoryCards = [
   {
-    title: "Smart key remote",
+    title: "Slimme afstandsbediening",
     slug: "smart-key-remote",
     imageSrc: "/key-chain.jpeg",
-    imageAlt: "Smart bike key remote",
+    imageAlt: "Slimme fietssleutel afstandsbediening",
   },
   {
-    title: "Ride essentials",
+    title: "Essentials voor onderweg",
     slug: "ride-essentials",
     imageSrc: "/phone-holder.jpeg",
-    imageAlt: "Cycling essentials kit",
+    imageAlt: "Essentials kit voor fietsers",
   },
 ] as const;
 
-const btnDark =
-  "inline-flex min-h-11 items-center justify-center rounded-md bg-zinc-900 px-8 text-sm font-semibold text-white transition-opacity hover:opacity-90";
-const btnOutline =
-  "inline-flex min-h-10 w-full items-center justify-center rounded-md border border-gray-300 bg-white px-4 py-2.5 text-sm font-semibold text-gray-900 transition-colors hover:bg-gray-100";
+const btnPrimary =
+  "inline-flex min-h-11 items-center justify-center rounded-2xl bg-white px-8 text-sm font-semibold text-[#4a5260] shadow-sm transition-all hover:scale-[1.01] hover:bg-white/90";
+
+const btnSecondary =
+  "inline-flex min-h-10 w-full items-center justify-center rounded-2xl border border-white/30 bg-white/10 px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-white/20";
 
 export function HomePage() {
   const location = useLocation();
   const featuresRef = useRef(null);
   const featuresInView = useInView(featuresRef, { once: true, margin: "-50px" });
-
   const bikesRef = useRef(null);
   const bikesInView = useInView(bikesRef, { once: true, margin: "-60px" });
-
   const accessoriesRef = useRef(null);
-  const accessoriesInView = useInView(accessoriesRef, {
-    once: true,
-    margin: "-50px",
-  });
+  const accessoriesInView = useInView(accessoriesRef, { once: true, margin: "-50px" });
 
   useEffect(() => {
     if (!location.hash) return;
@@ -79,7 +75,8 @@ export function HomePage() {
 
   return (
     <motion.div
-      className="min-h-screen bg-[#fafafa]"
+      className="min-h-screen"
+      style={{ backgroundColor: "var(--fh-bg)" }}
       initial={{ opacity: 0, y: 12 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.45, ease: easeOut }}
@@ -91,9 +88,10 @@ export function HomePage() {
         <section
           id="values"
           ref={featuresRef}
-          className={`border-y border-gray-200/90 bg-white ${sectionPadX} py-12 sm:py-14 lg:py-16`}
+          className={`border-y border-white/10 ${sectionPadX} py-12 sm:py-14 lg:py-16`}
+          style={{ backgroundColor: "var(--fh-surface-lo)" }}
         >
-          <div className={`${container}`}>
+          <div className={container}>
             <motion.div
               className="grid gap-10 sm:gap-8 md:grid-cols-3 md:gap-10 lg:gap-16"
               variants={staggerContainer}
@@ -102,40 +100,40 @@ export function HomePage() {
             >
               <FeatureCard
                 icon={Shield}
-                title="Premium quality"
-                description="Exceptional craftsmanship."
+                title="Premium kwaliteit"
+                description="Zorgvuldig afgewerkt."
                 variants={staggerItem}
               />
               <FeatureCard
                 icon={Truck}
-                title="Fast shipping"
-                description="Prompt delivery to your doorstep."
+                title="Snelle levering"
+                description="Binnen enkele dagen bij je thuis."
                 variants={staggerItem}
               />
               <FeatureCard
                 icon={Headphones}
-                title="Expert support"
-                description="Professional assistance available."
+                title="Deskundige service"
+                description="We helpen je graag verder."
                 variants={staggerItem}
               />
             </motion.div>
           </div>
         </section>
 
-        {/* Explore bikes — 3-column grid */}
+        {/* Bikes grid */}
         <section
           id="bikes"
           ref={bikesRef}
           className={`${sectionPadX} py-14 sm:py-16 lg:py-20`}
         >
-          <div className={`${container}`}>
+          <div className={container}>
             <motion.h2
-              className="text-center text-2xl font-bold tracking-tight text-gray-900 sm:text-3xl"
+              className="text-center text-2xl font-bold tracking-tight text-white sm:text-3xl"
               initial={{ opacity: 0, y: 12 }}
               animate={bikesInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 12 }}
               transition={{ duration: 0.45, ease: easeOut }}
             >
-              Electric bikes
+              Ontdek onze fietsen
             </motion.h2>
 
             <motion.ul
@@ -144,44 +142,63 @@ export function HomePage() {
               initial="hidden"
               animate={bikesInView ? "show" : "hidden"}
             >
-              {bikesShowcase.map((bike) => {
-                return (
-                  <motion.li key={bike.slug} variants={staggerItem}>
-                    <article className="flex h-full flex-col text-left">
-                      <div className="rounded-md bg-neutral-200/80 p-1.5 ring-1 ring-gray-200/80 sm:p-2">
-                        <BikeShowcaseCarousel productLabel={bike.title} />
-                      </div>
-                      <div className="mt-4 flex flex-1 flex-col">
-                        <Link
-                          to={`/product/${bike.slug}`}
-                          className="text-base font-bold leading-snug text-gray-900 hover:underline"
-                        >
-                          {bike.title}
-                        </Link>
-                        <p className="mt-1 text-sm font-semibold tabular-nums text-gray-900">
-                          Price: {bike.price}
-                        </p>
-                        <div className="mt-3 border-t border-gray-200/90 pt-3">
-                          <p className="text-xs font-bold uppercase tracking-wide text-gray-500">
-                            Includes:
-                          </p>
-                          <ul className="mt-2 space-y-1 text-sm leading-relaxed text-gray-600">
-                            {bike.features.map((item) => (
-                              <li key={item}>• {item}</li>
-                            ))}
-                          </ul>
-                        </div>
-                        <Link
-                          to={`/product/${bike.slug}`}
-                          className={`${btnDark} mt-5 w-full text-center sm:mt-6`}
-                        >
-                          View product
-                        </Link>
-                      </div>
-                    </article>
-                  </motion.li>
-                );
-              })}
+              {bikesShowcase.map((bike) => (
+                <motion.li key={bike.slug} variants={staggerItem}>
+                  <article
+                    className="flex h-full flex-col rounded-3xl p-1.5 ring-1 ring-white/15 sm:p-2"
+                    style={{ backgroundColor: "var(--fh-surface)" }}
+                  >
+                    <div className="overflow-hidden rounded-2xl">
+                      <BikeShowcaseCarousel
+                        productLabel={bike.title}
+                        images={bike.images}
+                        imageAlt={bike.imageAlt}
+                        imageAlts={bike.imageAlts}
+                      />
+                    </div>
+
+                    <div className="mt-4 flex flex-1 flex-col px-2 pb-2">
+                      {/* Title + price */}
+                      <Link
+                        to={`/product/${bike.slug}`}
+                        className="text-base font-bold leading-snug text-white hover:underline hover:decoration-white/50"
+                      >
+                        {bike.title}
+                      </Link>
+                      <p className="mt-1 text-sm font-semibold tabular-nums text-white/75">
+                        {bike.price}
+                      </p>
+
+                      {/* Inclusief collapsible */}
+                      <details className="group mt-4 overflow-hidden rounded-2xl border border-white/15">
+                        <summary className="flex cursor-pointer list-none select-none items-center justify-between px-4 py-3 text-xs font-bold uppercase tracking-widest text-white/90 marker:content-none hover:bg-white/8 [&::-webkit-details-marker]:hidden">
+                          Inclusief
+                          <ChevronDown
+                            className="h-4 w-4 shrink-0 text-white/60 transition-transform group-open:rotate-180"
+                            strokeWidth={2}
+                          />
+                        </summary>
+                        <ul className="border-t border-white/10 px-4 pb-4 pt-3 space-y-1.5 text-sm text-white/75">
+                          {bike.features.map((item) => (
+                            <li key={item} className="flex items-center gap-2">
+                              <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-white/50" />
+                              {item}
+                            </li>
+                          ))}
+                        </ul>
+                      </details>
+
+                      {/* CTA */}
+                      <Link
+                        to={`/product/${bike.slug}`}
+                        className={`${btnPrimary} mt-4 w-full text-center`}
+                      >
+                        Bekijk product
+                      </Link>
+                    </div>
+                  </article>
+                </motion.li>
+              ))}
             </motion.ul>
 
             <motion.div
@@ -190,8 +207,8 @@ export function HomePage() {
               animate={bikesInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 10 }}
               transition={{ duration: 0.4, delay: 0.15, ease: easeOut }}
             >
-              <Link to="/product/v20-pro" className={btnDark}>
-                View all models
+              <Link to="/product/v20-pro" className={btnPrimary}>
+                Bekijk alle modellen
               </Link>
             </motion.div>
           </div>
@@ -201,18 +218,17 @@ export function HomePage() {
         <section
           id="accessories"
           ref={accessoriesRef}
-          className={`border-t border-gray-200/90 bg-white ${sectionPadX} py-14 sm:py-16 lg:py-20`}
+          className={`border-t border-white/10 ${sectionPadX} py-14 sm:py-16 lg:py-20`}
+          style={{ backgroundColor: "var(--fh-surface-lo)" }}
         >
-          <div className={`${container}`}>
+          <div className={container}>
             <motion.h2
-              className="text-2xl font-bold tracking-tight text-gray-900 sm:text-3xl"
+              className="text-2xl font-bold tracking-tight text-white sm:text-3xl"
               initial={{ opacity: 0, y: 10 }}
-              animate={
-                accessoriesInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 10 }
-              }
+              animate={accessoriesInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 10 }}
               transition={{ duration: 0.45, ease: easeOut }}
             >
-              Find your perfect bike accessories
+              Vind jouw perfecte accessoires
             </motion.h2>
 
             <motion.div
@@ -225,9 +241,11 @@ export function HomePage() {
                 <motion.article
                   key={item.slug}
                   variants={staggerItem}
-                  className="flex flex-col overflow-hidden rounded-lg border border-gray-200 bg-gray-50 shadow-sm"
+                  className="flex flex-col overflow-hidden rounded-3xl border border-white/15 shadow-sm"
+                  style={{ backgroundColor: "var(--fh-surface)" }}
                 >
-                  <div className="flex h-36 items-center justify-center bg-neutral-100/90 px-3 py-3 sm:h-40 md:h-44">
+                  <div className="flex h-36 items-center justify-center px-3 py-3 sm:h-40 md:h-44"
+                    style={{ backgroundColor: "var(--fh-surface-hi)" }}>
                     <img
                       src={item.imageSrc}
                       alt={item.imageAlt}
@@ -235,14 +253,12 @@ export function HomePage() {
                     />
                   </div>
                   <div className="flex flex-1 flex-col p-3 sm:p-4 md:p-5">
-                    <p className="text-sm font-bold text-gray-900 sm:text-base">
-                      {item.title}
-                    </p>
+                    <p className="text-sm font-bold text-white sm:text-base">{item.title}</p>
                     <Link
                       to={`/product/${item.slug}`}
-                      className={`${btnOutline} mt-3 text-sm sm:mt-4`}
+                      className={`${btnSecondary} mt-3 text-sm sm:mt-4`}
                     >
-                      Shop accessories
+                      Bekijk accessoires
                     </Link>
                   </div>
                 </motion.article>

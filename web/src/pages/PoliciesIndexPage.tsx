@@ -7,58 +7,57 @@ const easeOut = "easeOut" as const;
 const links = [
   {
     to: "/policies/ordering",
-    title: "Ordering & delivery",
-    desc: "Checkout, payments, tracking, and delivery timeframes.",
+    title: "Bestellen & levering",
+    desc: "Betaling, tracking en levertijden.",
   },
   {
     to: "/policies/refund",
-    title: "Refund policy",
-    desc: "Returns, condition requirements, and refund timing.",
+    title: "Retourbeleid",
+    desc: "Retourvoorwaarden en terugbetaling.",
   },
   {
     to: "/policies/damaged",
-    title: "Damaged or defective products",
-    desc: "How to report issues and what we’ll do next.",
+    title: "Beschadigde producten",
+    desc: "Melden en vervolgstappen.",
   },
 ] as const;
 
 export function PoliciesIndexPage() {
   return (
     <motion.div
-      className="min-h-screen bg-[#fafafa]"
+      className="min-h-screen"
+      style={{ backgroundColor: "var(--fh-bg)" }}
       initial={{ opacity: 0, y: 12 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4, ease: easeOut }}
     >
       <main className="px-6 py-16 lg:px-8 lg:py-20">
         <div className="mx-auto max-w-3xl">
-          <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-gray-400">
-            Policies
+          <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-neutral-500">
+            Beleid
           </p>
-          <h1 className="mt-3 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
-            Customer policies
+          <h1 className="font-display mt-3 text-3xl font-semibold tracking-tight text-neutral-900 sm:text-4xl">
+            Klantbeleid
           </h1>
-          <p className="mt-6 text-base leading-relaxed text-gray-600">
-            Straightforward information on ordering, returns, and product
-            issues—so you always know what to expect.
+          <p className="mt-6 text-base leading-relaxed text-neutral-600">
+            Duidelijke informatie over bestellen, retourneren en producten—zodat je weet wat je
+            kunt verwachten.
           </p>
           <ul className="mt-12 list-none space-y-4 p-0">
             {links.map(({ to, title, desc }) => (
               <li key={to}>
                 <Link
                   to={to}
-                  className="group flex items-start gap-4 rounded-2xl bg-white p-6 shadow-sm ring-1 ring-gray-200/80 transition-shadow hover:shadow-md"
+                  className="group flex items-start gap-4 rounded-3xl border border-neutral-200 bg-white p-6 shadow-sm ring-1 ring-neutral-200 transition-shadow hover:shadow-md"
                 >
                   <div className="min-w-0 flex-1">
-                    <p className="font-semibold text-gray-900 group-hover:underline group-hover:decoration-gray-300 group-hover:underline-offset-4">
+                    <p className="font-semibold text-neutral-900 group-hover:underline group-hover:decoration-neutral-400 group-hover:underline-offset-4">
                       {title}
                     </p>
-                    <p className="mt-2 text-sm leading-relaxed text-gray-600">
-                      {desc}
-                    </p>
+                    <p className="mt-2 text-sm leading-relaxed text-neutral-600">{desc}</p>
                   </div>
                   <ChevronRight
-                    className="mt-0.5 h-5 w-5 shrink-0 text-gray-400 transition-transform group-hover:translate-x-0.5 group-hover:text-gray-700"
+                    className="mt-0.5 h-5 w-5 shrink-0 text-neutral-500 transition-transform group-hover:translate-x-0.5 group-hover:text-neutral-700"
                     strokeWidth={1.5}
                     aria-hidden
                   />

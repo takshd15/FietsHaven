@@ -41,7 +41,7 @@ function StarRow({ rating, size = "md" }: { rating: number; size?: "sm" | "md" }
   return (
     <div
       className="flex items-center gap-0.5"
-      aria-label={`${rating} out of 5 stars`}
+      aria-label={`${rating} van 5 sterren`}
     >
       {Array.from({ length: 5 }, (_, i) => {
         const filled = i < Math.floor(rating);
@@ -80,11 +80,14 @@ export function ProductDetail({ product }: ProductDetailProps) {
 
   const lowStock = product.lowStockCount;
   const moreDetails = product.moreDetails?.trim();
+  const specIntro = product.specIntro?.trim();
+  const specs = product.specs?.filter(Boolean) ?? [];
+  const hasSpecsSection = Boolean(specIntro) || specs.length > 0 || Boolean(moreDetails);
 
   useEffect(() => {
-    document.title = `${product.title} | Fiets Haven`;
+    document.title = `${product.title} | FietsHaven`;
     return () => {
-      document.title = "Fiets Haven — Electric bikes & accessories";
+      document.title = "FietsHaven — Elektrische fietsen & accessoires";
     };
   }, [product.title]);
 
@@ -132,7 +135,8 @@ export function ProductDetail({ product }: ProductDetailProps) {
 
   return (
     <motion.div
-      className="min-h-screen bg-[#f4f4f5] pb-28 lg:pb-12"
+      className="min-h-screen pb-28 lg:pb-12"
+      style={{ backgroundColor: "var(--fh-bg)" }}
       initial={pageFrom}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: reduceMotion ? 0 : 0.45, ease: easeOut }}
@@ -146,9 +150,9 @@ export function ProductDetail({ product }: ProductDetailProps) {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -12 }}
             transition={{ duration: 0.25, ease: easeOut }}
-            className="fixed left-1/2 top-20 z-[100] max-w-[min(90vw,20rem)] -translate-x-1/2 rounded-xl bg-gray-900 px-5 py-3 text-center text-sm font-semibold text-white shadow-lg"
+            className="fixed left-1/2 top-20 z-[100] max-w-[min(90vw,20rem)] -translate-x-1/2 rounded-2xl bg-white px-5 py-3 text-center text-sm font-semibold text-[#4a5260] shadow-lg"
           >
-            Added to cart ✅
+            Toegevoegd aan winkelwagen
           </motion.div>
         ) : null}
       </AnimatePresence>
@@ -161,10 +165,10 @@ export function ProductDetail({ product }: ProductDetailProps) {
         >
           <Link
             to="/"
-            className="inline-flex items-center gap-2 text-sm font-medium text-gray-600 transition-colors hover:text-gray-900"
+            className="inline-flex items-center gap-2 text-sm font-medium text-white/70 transition-colors hover:text-white"
           >
             <ArrowLeft className="h-4 w-4" strokeWidth={2} />
-            Back to shop
+            Terug naar shop
           </Link>
         </motion.div>
 
@@ -176,7 +180,13 @@ export function ProductDetail({ product }: ProductDetailProps) {
             animate={{ opacity: 1 }}
             transition={{ duration: 0.35, ease: easeOut }}
           >
-            <BikeShowcaseCarousel productLabel={product.title} variant="pdp" />
+            <BikeShowcaseCarousel
+              productLabel={product.title}
+              variant="pdp"
+              images={product.images}
+              imageAlt={product.imageAlt}
+              imageAlts={product.imageAlts}
+            />
           </motion.div>
 
           {/* Center: details */}
@@ -188,22 +198,22 @@ export function ProductDetail({ product }: ProductDetailProps) {
           >
             <motion.div variants={detailItem} className="flex flex-wrap items-center gap-2">
               {product.bestSeller ? (
-                <span className="inline-flex items-center gap-1 rounded-full bg-amber-100 px-2.5 py-1 text-xs font-semibold text-amber-900">
+                <span className="inline-flex items-center gap-1 rounded-full bg-amber-400/20 px-2.5 py-1 text-xs font-semibold text-amber-200">
                   <Award className="h-3.5 w-3.5" strokeWidth={2} />
-                  Best seller
+                  Bestseller
                 </span>
               ) : null}
-              <span className="inline-flex items-center gap-1 rounded-full bg-gray-100 px-2.5 py-1 text-xs font-medium text-gray-700">
+              <span className="inline-flex items-center gap-1 rounded-full border border-white/20 bg-white/10 px-2.5 py-1 text-xs font-medium text-white/80">
                 <ShieldCheck className="h-3.5 w-3.5" strokeWidth={2} />
-                30-day returns · 2-year warranty
+                30 dagen retour · 2 jaar garantie
               </span>
             </motion.div>
 
             <motion.div variants={detailItem}>
-              <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-gray-400">
-                Fiets Haven
+              <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-white/50">
+                FietsHaven
               </p>
-              <h1 className="mt-2 text-2xl font-bold tracking-tight text-gray-900 sm:text-3xl lg:text-[1.75rem] lg:leading-tight">
+              <h1 className="mt-2 text-2xl font-bold tracking-tight text-white sm:text-3xl lg:text-[1.75rem] lg:leading-tight">
                 {product.title}
               </h1>
             </motion.div>
@@ -211,32 +221,32 @@ export function ProductDetail({ product }: ProductDetailProps) {
             <motion.div variants={detailItem}>
               <a
                 href="#reviews"
-                className="inline-flex flex-wrap items-center gap-2 text-sm text-gray-600 transition-colors hover:text-gray-900"
+                className="inline-flex flex-wrap items-center gap-2 text-sm text-white/70 transition-colors hover:text-white"
               >
                 <StarRow rating={product.rating} />
-                <span className="font-semibold text-gray-900">
+                <span className="font-semibold text-white">
                   {product.rating}/5
                 </span>
-                <span className="text-gray-500">
-                  ({product.reviewCount} reviews)
+                <span className="text-white/55">
+                  ({product.reviewCount} beoordelingen)
                 </span>
               </a>
             </motion.div>
 
             <motion.p
               variants={detailItem}
-              className="text-base leading-relaxed text-gray-600 sm:text-[17px]"
+              className="text-base leading-relaxed text-white/75 sm:text-[17px]"
             >
               {product.description}
             </motion.p>
 
             <motion.div variants={detailItem}>
-              <h2 className="text-sm font-semibold text-gray-900">Highlights</h2>
+              <h2 className="text-sm font-bold uppercase tracking-widest text-white/60">Inclusief</h2>
               <ul className="mt-3 space-y-2.5">
                 {product.features.map((line) => (
-                  <li key={line} className="flex gap-3 text-sm text-gray-700">
+                  <li key={line} className="flex gap-3 text-sm text-white/80">
                     <Check
-                      className="mt-0.5 h-4 w-4 shrink-0 text-emerald-600"
+                      className="mt-0.5 h-4 w-4 shrink-0 text-emerald-400"
                       strokeWidth={2.5}
                     />
                     {line}
@@ -245,20 +255,33 @@ export function ProductDetail({ product }: ProductDetailProps) {
               </ul>
             </motion.div>
 
-            {moreDetails ? (
+            {hasSpecsSection ? (
               <motion.div variants={detailItem}>
-                <details className="group rounded-xl bg-white ring-1 ring-gray-200/90 open:shadow-sm">
-                  <summary className="flex cursor-pointer list-none items-center justify-between gap-3 px-4 py-4 text-sm font-semibold text-gray-900 marker:content-none [&::-webkit-details-marker]:hidden">
-                    More details
+                <details className="group overflow-hidden rounded-2xl border border-white/15" style={{ backgroundColor: "var(--fh-surface-lo)" }}>
+                  <summary className="flex cursor-pointer list-none select-none items-center justify-between gap-3 px-4 py-4 text-sm font-bold uppercase tracking-widest text-white/80 marker:content-none hover:bg-white/8 [&::-webkit-details-marker]:hidden">
+                    Product specificaties
                     <ChevronDown
-                      className="h-5 w-5 shrink-0 text-gray-400 transition-transform group-open:rotate-180"
+                      className="h-5 w-5 shrink-0 text-white/50 transition-transform group-open:rotate-180"
                       strokeWidth={2}
                     />
                   </summary>
-                  <div className="border-t border-gray-100 px-4 pb-4 pt-2">
-                    <p className="text-sm leading-relaxed text-gray-600">
-                      {moreDetails}
-                    </p>
+                  <div className="border-t border-white/10 px-4 pb-4 pt-3">
+                    {specIntro ? (
+                      <p className="text-sm leading-relaxed text-white/70">{specIntro}</p>
+                    ) : null}
+                    {specs.length > 0 ? (
+                      <ul className="mt-3 space-y-2 text-sm text-white/80">
+                        {specs.map((spec) => (
+                          <li key={spec} className="flex items-start gap-2">
+                            <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-white/55" />
+                            <span>{spec}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    ) : null}
+                    {!specIntro && specs.length === 0 && moreDetails ? (
+                      <p className="text-sm leading-relaxed text-white/70">{moreDetails}</p>
+                    ) : null}
                   </div>
                 </details>
               </motion.div>
@@ -272,7 +295,7 @@ export function ProductDetail({ product }: ProductDetailProps) {
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.5, ease: easeOut, delay: reduceMotion ? 0 : 0.08 }}
           >
-            <div className="sticky top-24 rounded-xl border border-gray-200/80 bg-white p-6 shadow-md">
+            <div className="sticky top-24 rounded-3xl border border-white/15 p-6 shadow-md" style={{ backgroundColor: "var(--fh-surface)" }}>
               <PurchasePanel
                 product={product}
                 quantity={quantity}
@@ -289,7 +312,7 @@ export function ProductDetail({ product }: ProductDetailProps) {
 
           {/* Purchase card — mobile (in flow) */}
           <div className="lg:col-span-12 lg:hidden">
-            <div className="rounded-xl border border-gray-200/80 bg-white p-6 shadow-md">
+            <div className="rounded-3xl border border-white/15 p-6 shadow-md" style={{ backgroundColor: "var(--fh-surface)" }}>
               <PurchasePanel
                 product={product}
                 quantity={quantity}
@@ -308,7 +331,7 @@ export function ProductDetail({ product }: ProductDetailProps) {
 
         <motion.section
           id="reviews"
-          className="mt-16 border-t border-gray-200/90 pt-14 lg:mt-20 lg:pt-16"
+          className="mt-16 border-t border-white/15 pt-14 lg:mt-20 lg:pt-16"
           initial={{ opacity: 0, y: 16 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-50px" }}
@@ -316,21 +339,21 @@ export function ProductDetail({ product }: ProductDetailProps) {
         >
           <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
             <div>
-              <h2 className="text-2xl font-bold tracking-tight text-gray-900 sm:text-3xl">
-                Customer reviews
+              <h2 className="text-2xl font-bold tracking-tight text-white sm:text-3xl">
+                Beoordelingen
               </h2>
-              <p className="mt-1 text-sm text-gray-600">
-                Verified buyers on this product.
+              <p className="mt-1 text-sm text-white/60">
+                Van gekochte klanten.
               </p>
             </div>
-            <div className="flex items-center gap-3 rounded-xl bg-white px-4 py-3 ring-1 ring-gray-200/90">
-              <span className="text-3xl font-bold tabular-nums text-gray-900">
+            <div className="flex items-center gap-3 rounded-2xl border border-white/15 px-4 py-3" style={{ backgroundColor: "var(--fh-surface)" }}>
+              <span className="text-3xl font-bold tabular-nums text-white">
                 {product.rating}
               </span>
               <div>
                 <StarRow rating={product.rating} />
-                <p className="mt-0.5 text-xs text-gray-500">
-                  Based on {product.reviewCount} reviews
+                <p className="mt-0.5 text-xs text-white/55">
+                  Op basis van {product.reviewCount} beoordelingen
                 </p>
               </div>
             </div>
@@ -348,13 +371,13 @@ export function ProductDetail({ product }: ProductDetailProps) {
                   delay: reduceMotion ? 0 : i * 0.07,
                   ease: easeOut,
                 }}
-                className="rounded-xl bg-white p-5 shadow-sm ring-1 ring-gray-200/85"
+                className="rounded-3xl border border-white/12 p-5 shadow-sm" style={{ backgroundColor: "var(--fh-surface)" } as React.CSSProperties}
               >
                 <div className="flex items-center justify-between gap-2">
-                  <span className="font-semibold text-gray-900">{r.author}</span>
+                  <span className="font-semibold text-white">{r.author}</span>
                   <StarRow rating={r.rating} size="sm" />
                 </div>
-                <p className="mt-3 text-sm leading-relaxed text-gray-600">
+                <p className="mt-3 text-sm leading-relaxed text-white/70">
                   “{r.text}”
                 </p>
               </motion.li>
@@ -364,25 +387,49 @@ export function ProductDetail({ product }: ProductDetailProps) {
       </div>
 
       {/* Sticky mobile CTA */}
-      <div className="fixed bottom-0 left-0 right-0 z-40 border-t border-gray-200/90 bg-white/98 p-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] shadow-[0_-8px_32px_rgba(0,0,0,0.08)] backdrop-blur-md lg:hidden">
-        <div className="mx-auto flex max-w-7xl items-center gap-3 px-1">
-          <div className="min-w-0 flex-1">
-            <p className="text-[11px] font-medium uppercase tracking-wide text-gray-400">
-              Price
-            </p>
-            <p className="truncate text-lg font-bold tabular-nums text-gray-900">
-              {product.price}
-            </p>
+      <div className="fixed bottom-0 left-0 right-0 z-40 border-t border-white/10 p-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] shadow-[0_-8px_32px_rgba(0,0,0,0.25)] backdrop-blur-md lg:hidden" style={{ backgroundColor: "var(--fh-surface-lo)" }}>
+        <div className="mx-auto max-w-7xl px-1">
+          <div className="flex items-center gap-3">
+            <div className="min-w-0 flex-1">
+              <p className="text-[11px] font-medium uppercase tracking-wide text-white/50">
+                Prijs
+              </p>
+              <p className="truncate text-lg font-bold tabular-nums text-white">
+                {product.price}
+              </p>
+            </div>
+            <motion.button
+              type="button"
+              onClick={handleBuyNow}
+              disabled={buyDisabled}
+              whileHover={{ scale: buyDisabled ? 1 : 1.02 }}
+              whileTap={{ scale: buyDisabled ? 1 : 0.98 }}
+              className="min-h-12 min-w-0 flex-1 rounded-2xl bg-white px-4 text-sm font-semibold text-[#4a5260] shadow-md transition-all hover:bg-white/90 disabled:opacity-70"
+            >
+              Nu kopen - WhatsApp
+            </motion.button>
           </div>
           <motion.button
             type="button"
-            onClick={handleBuyNow}
-            disabled={buyDisabled}
-            whileHover={{ scale: buyDisabled ? 1 : 1.02 }}
-            whileTap={{ scale: buyDisabled ? 1 : 0.98 }}
-            className="min-h-12 min-w-0 flex-1 rounded-xl bg-gray-900 px-4 text-sm font-semibold text-white shadow-md transition-colors hover:bg-black disabled:opacity-70"
+            onClick={handleAddToCart}
+            disabled={addDisabled}
+            whileHover={{ scale: addDisabled ? 1 : 1.01 }}
+            whileTap={{ scale: addDisabled ? 1 : 0.98 }}
+            transition={{ duration: 0.2, ease: easeOut }}
+            className="mt-2 flex min-h-11 w-full items-center justify-center rounded-2xl border-2 border-white/25 bg-white/10 py-3 text-sm font-semibold text-white transition-all hover:bg-white/20 disabled:opacity-70"
           >
-            Buy now — WhatsApp
+            {addedToCart ? (
+              <motion.span
+                className="flex items-center gap-2"
+                initial={{ opacity: 0, y: 4 }}
+                animate={{ opacity: 1, y: 0 }}
+              >
+                <Check className="h-4 w-4 text-emerald-400" strokeWidth={2.5} />
+                Toegevoegd aan winkelwagen
+              </motion.span>
+            ) : (
+              "Toevoegen aan winkelwagen"
+            )}
           </motion.button>
         </div>
       </div>
@@ -415,37 +462,37 @@ function PurchasePanel({
 }) {
   return (
     <div className="space-y-5">
-      <p className="hidden text-3xl font-bold tabular-nums text-gray-900 lg:block">
+      <p className="hidden text-3xl font-bold tabular-nums text-white lg:block">
         {product.price}
       </p>
 
       <div className="space-y-2 text-sm">
-        <p className="flex items-center gap-2 font-medium text-emerald-700">
-          <span className="inline-block h-2 w-2 shrink-0 rounded-full bg-emerald-500" />
-          In stock
+        <p className="flex items-center gap-2 font-medium text-emerald-300">
+          <span className="inline-block h-2 w-2 shrink-0 rounded-full bg-emerald-400" />
+          Op voorraad
         </p>
-        <p className="flex items-start gap-2 text-gray-600">
-          <Truck className="mt-0.5 h-4 w-4 shrink-0 text-gray-400" strokeWidth={2} />
-          Free delivery in 3–5 days
+        <p className="flex items-start gap-2 text-white/70">
+          <Truck className="mt-0.5 h-4 w-4 shrink-0 text-white/40" strokeWidth={2} />
+          Gratis levering binnen 3–5 dagen
         </p>
         {lowStock != null ? (
-          <p className="flex items-center gap-2 font-medium text-amber-800">
+          <p className="flex items-center gap-2 font-medium text-amber-300">
             <Package className="h-4 w-4 shrink-0" strokeWidth={2} />
-            Only {lowStock} left in stock
+            Nog {lowStock} op voorraad
           </p>
         ) : null}
       </div>
 
       <div>
-        <label htmlFor="qty" className="text-xs font-semibold uppercase tracking-wide text-gray-500">
-          Quantity
+        <label htmlFor="qty" className="text-xs font-semibold uppercase tracking-wide text-white/55">
+          Aantal
         </label>
         <div className="mt-2 flex items-center gap-2">
           <button
             type="button"
-            aria-label="Decrease quantity"
+            aria-label="Aantal verlagen"
             onClick={() => setQuantity(Math.max(1, quantity - 1))}
-            className="flex h-10 w-10 items-center justify-center rounded-lg border border-gray-200 bg-white text-lg font-medium text-gray-700 transition-colors hover:bg-gray-50"
+            className="flex h-10 w-10 items-center justify-center rounded-2xl border border-white/20 bg-white/10 text-lg font-medium text-white transition-colors hover:bg-white/20"
           >
             −
           </button>
@@ -453,13 +500,13 @@ function PurchasePanel({
             id="qty"
             readOnly
             value={quantity}
-            className="h-10 w-14 rounded-lg border border-gray-200 bg-gray-50 text-center text-sm font-semibold tabular-nums text-gray-900"
+            className="h-10 w-14 rounded-2xl border border-white/20 bg-white/10 text-center text-sm font-semibold tabular-nums text-white"
           />
           <button
             type="button"
-            aria-label="Increase quantity"
+            aria-label="Aantal verhogen"
             onClick={() => setQuantity(Math.min(9, quantity + 1))}
-            className="flex h-10 w-10 items-center justify-center rounded-lg border border-gray-200 bg-white text-lg font-medium text-gray-700 transition-colors hover:bg-gray-50"
+            className="flex h-10 w-10 items-center justify-center rounded-2xl border border-white/20 bg-white/10 text-lg font-medium text-white transition-colors hover:bg-white/20"
           >
             +
           </button>
@@ -474,9 +521,9 @@ function PurchasePanel({
           whileHover={{ scale: buyDisabled ? 1 : 1.02 }}
           whileTap={{ scale: buyDisabled ? 1 : 0.98 }}
           transition={{ duration: 0.2, ease: easeOut }}
-          className="flex min-h-[3.25rem] w-full items-center justify-center rounded-xl bg-gray-900 py-3.5 text-base font-semibold text-white shadow-md transition-colors hover:bg-black disabled:opacity-75"
+          className="flex min-h-[3.25rem] w-full items-center justify-center rounded-2xl bg-white py-3.5 text-base font-semibold text-[#4a5260] shadow-md transition-all hover:bg-white/90 disabled:opacity-75"
         >
-          Buy now — WhatsApp
+          Nu kopen - WhatsApp
         </motion.button>
         <motion.button
           type="button"
@@ -485,7 +532,7 @@ function PurchasePanel({
           whileHover={{ scale: addDisabled ? 1 : 1.02 }}
           whileTap={{ scale: addDisabled ? 1 : 0.98 }}
           transition={{ duration: 0.2, ease: easeOut }}
-          className="flex min-h-11 w-full items-center justify-center rounded-xl border-2 border-gray-200 bg-white py-3 text-sm font-semibold text-gray-900 transition-colors hover:border-gray-300 hover:bg-gray-50 disabled:opacity-70"
+          className="flex min-h-11 w-full items-center justify-center rounded-2xl border-2 border-white/25 bg-white/10 py-3 text-sm font-semibold text-white transition-all hover:bg-white/20 disabled:opacity-70"
         >
           {addedToCart ? (
             <motion.span
@@ -493,29 +540,29 @@ function PurchasePanel({
               initial={{ opacity: 0, y: 4 }}
               animate={{ opacity: 1, y: 0 }}
             >
-              <Check className="h-4 w-4 text-emerald-600" strokeWidth={2.5} />
-              Added to cart ✅
+              <Check className="h-4 w-4 text-emerald-400" strokeWidth={2.5} />
+              Toegevoegd aan winkelwagen
             </motion.span>
           ) : (
-            "Add to cart"
+            "Toevoegen aan winkelwagen"
           )}
         </motion.button>
       </div>
 
       {!compactTrust ? (
-        <div className="space-y-2 border-t border-gray-100 pt-4 text-xs text-gray-500">
+        <div className="space-y-2 border-t border-white/15 pt-4 text-xs text-white/55">
           <p className="flex items-center gap-2">
-            <ShieldCheck className="h-4 w-4 text-gray-400" strokeWidth={2} />
-            Order via WhatsApp — secure & direct
+            <ShieldCheck className="h-4 w-4 text-white/35" strokeWidth={2} />
+            Bestellen via WhatsApp — veilig en direct
           </p>
           <p className="flex items-center gap-2">
-            <RotateCcw className="h-4 w-4 text-gray-400" strokeWidth={2} />
-            Easy returns — 30-day guarantee
+            <RotateCcw className="h-4 w-4 text-white/35" strokeWidth={2} />
+            Eenvoudig retour — 30 dagen garantie
           </p>
         </div>
       ) : (
-        <p className="text-center text-[11px] text-gray-500">
-          WhatsApp order · Easy returns
+        <p className="text-center text-[11px] text-white/50">
+          WhatsApp-bestelling · Eenvoudig retour
         </p>
       )}
     </div>

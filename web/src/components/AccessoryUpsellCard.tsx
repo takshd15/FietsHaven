@@ -75,7 +75,7 @@ export function AccessoryUpsellCard({
             transition={{ duration: 0.2, ease: easeOut }}
             className={btnAccessory}
           >
-            View details
+            Bekijk details
           </motion.span>
         </Link>
       </motion.div>
