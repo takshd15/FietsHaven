@@ -10,7 +10,6 @@ const heroBikeSlides = [
   { src: publicAsset("hero/dubbele-accu.jpeg"), alt: "Elektrische fiets met dubbele accu" },
   { src: publicAsset("hero/mini.jpeg"), alt: "Elektrische fiets Mini" },
 ] as const;
-const heroCardBackground = publicAsset("home-bg-alt-bike.png");
 
 const heroHeading = {
   hidden: { opacity: 0, y: 24, scale: 0.98 },
@@ -49,15 +48,15 @@ const heroButton = {
 };
 
 const btnPrimary =
-  "inline-flex min-h-11 items-center justify-center rounded-2xl bg-white px-7 text-sm font-semibold text-[#4a5260] shadow-sm transition-all hover:scale-[1.01] hover:bg-white/90";
+  "inline-flex min-h-11 items-center justify-center rounded-xl border border-gray-200 bg-white px-7 text-sm font-semibold text-gray-900 transition-colors hover:bg-gray-100";
 const btnSecondary =
-  "inline-flex min-h-11 items-center justify-center rounded-2xl border border-white/60 bg-white px-7 text-sm font-semibold text-[#4a5260] shadow-sm transition-all hover:scale-[1.01] hover:bg-white/90";
+  "inline-flex min-h-11 items-center justify-center rounded-xl border border-white/35 bg-transparent px-7 text-sm font-semibold text-white transition-colors hover:bg-white/10";
 
 const SLIDE_INTERVAL_MS = 2500;
 
 /** Full-bleed within the hero card; square on small screens to match product shots */
 const heroImgClass =
-  "absolute inset-0 h-full w-full object-contain object-center drop-shadow-[0_20px_48px_rgba(0,0,0,0.5)] sm:drop-shadow-[0_28px_56px_rgba(0,0,0,0.55)]";
+  "absolute inset-0 h-full w-full object-contain object-center";
 
 const heroImgSizes =
   "(min-width: 1280px) 640px, (min-width: 1024px) 48vw, 100vw";
@@ -112,7 +111,6 @@ function HeroImage() {
       onTouchStart={onTouchStart}
       onTouchEnd={onTouchEnd}
     >
-      <div className="pointer-events-none absolute inset-0 z-10 bg-gradient-to-l from-transparent via-transparent to-black/40 lg:to-black/50" />
       <div
         className="relative w-full overflow-hidden bg-neutral-950 px-0 pt-0 pb-[max(0.75rem,env(safe-area-inset-bottom))] lg:py-0"
         role="region"
@@ -148,7 +146,7 @@ function HeroImage() {
               e.preventDefault();
               goPrev();
             }}
-            className="pointer-events-auto flex h-10 w-10 min-h-[44px] min-w-[44px] shrink-0 items-center justify-center rounded-full border border-white/30 bg-white/15 text-white shadow-md backdrop-blur-sm transition-colors hover:bg-white/25 sm:h-10 sm:w-10"
+            className="pointer-events-auto flex h-10 w-10 min-h-[44px] min-w-[44px] shrink-0 items-center justify-center rounded-full border border-white/20 bg-black/30 text-white transition-colors hover:bg-black/45 sm:h-10 sm:w-10"
             aria-label="Vorige fiets"
           >
             <ChevronLeft className="h-5 w-5 sm:h-6 sm:w-6" strokeWidth={2} />
@@ -159,7 +157,7 @@ function HeroImage() {
               e.preventDefault();
               goNext();
             }}
-            className="pointer-events-auto flex h-10 w-10 min-h-[44px] min-w-[44px] shrink-0 items-center justify-center rounded-full border border-white/30 bg-white/15 text-white shadow-md backdrop-blur-sm transition-colors hover:bg-white/25 sm:h-10 sm:w-10"
+            className="pointer-events-auto flex h-10 w-10 min-h-[44px] min-w-[44px] shrink-0 items-center justify-center rounded-full border border-white/20 bg-black/30 text-white transition-colors hover:bg-black/45 sm:h-10 sm:w-10"
             aria-label="Volgende fiets"
           >
             <ChevronRight className="h-5 w-5 sm:h-6 sm:w-6" strokeWidth={2} />
@@ -193,25 +191,15 @@ function HeroImage() {
 export function Hero() {
   return (
     <section id="home" className="px-4 pb-12 pt-8 sm:px-6 lg:px-8 lg:pb-16 lg:pt-10">
-      <div className="relative mx-auto max-w-7xl overflow-hidden rounded-2xl bg-neutral-950 shadow-lg ring-1 ring-white/15 sm:rounded-3xl">
-        <div className="pointer-events-none absolute inset-0" aria-hidden>
-          <img
-            src={heroCardBackground}
-            alt=""
-            className="h-full w-full object-cover object-center opacity-36 sm:opacity-42"
-            loading="lazy"
-            decoding="async"
-          />
-          <div className="absolute inset-0 bg-black/58 sm:bg-black/52" />
-        </div>
-        <div className="relative z-10 grid gap-0 lg:grid-cols-[1fr_1.05fr] lg:items-stretch">
+      <div className="relative mx-auto max-w-7xl overflow-hidden rounded-2xl bg-neutral-950 ring-1 ring-white/10 sm:rounded-3xl">
+        <div className="relative z-10 grid gap-0 lg:grid-cols-2 lg:items-stretch">
           <div className="order-2 flex flex-col justify-center px-6 py-10 sm:px-10 sm:py-12 lg:order-1 lg:py-16 lg:pl-12 lg:pr-6 xl:pl-14">
             <div className="max-w-xl">
               <motion.h1
                 variants={heroHeading}
                 initial="hidden"
                 animate="visible"
-                className="text-3xl font-bold leading-[1.08] tracking-tight text-white sm:text-4xl lg:text-5xl xl:text-[3.25rem]"
+                className="text-3xl font-bold leading-[1.1] tracking-tight text-white sm:text-4xl lg:text-5xl"
               >
                 Ontdek jouw perfecte rit
               </motion.h1>
@@ -219,7 +207,7 @@ export function Hero() {
                 variants={heroSub}
                 initial="hidden"
                 animate="visible"
-                className="mt-4 text-base font-normal leading-relaxed text-white/75 sm:text-lg"
+                className="mt-4 text-base font-normal leading-relaxed text-white/70 sm:text-lg"
               >
                 Ontdek onze collectie van hoogwaardige fietsen.
               </motion.p>

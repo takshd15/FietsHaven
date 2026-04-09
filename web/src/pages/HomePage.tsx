@@ -51,10 +51,10 @@ const accessoryCards = [
 ] as const;
 
 const btnPrimary =
-  "inline-flex min-h-11 items-center justify-center rounded-2xl bg-white px-8 text-sm font-semibold text-[#4a5260] shadow-sm transition-all hover:scale-[1.01] hover:bg-white/90";
+  "inline-flex min-h-11 items-center justify-center rounded-xl border border-gray-200 bg-white px-8 text-sm font-semibold text-gray-900 transition-colors hover:bg-gray-100";
 
 const btnSecondary =
-  "inline-flex min-h-10 w-full items-center justify-center rounded-2xl border border-gray-300 bg-white px-4 py-2.5 text-sm font-semibold text-gray-900 transition-colors hover:bg-gray-50";
+  "inline-flex min-h-10 w-full items-center justify-center rounded-xl border border-gray-300 bg-white px-4 py-2.5 text-sm font-semibold text-gray-900 transition-colors hover:bg-gray-50";
 
 export function HomePage() {
   const location = useLocation();
@@ -88,7 +88,7 @@ export function HomePage() {
         <section
           id="values"
           ref={featuresRef}
-          className={`border-y border-white/10 ${sectionPadX} py-12 sm:py-14 lg:py-16`}
+          className={`border-y border-gray-200/70 ${sectionPadX} py-12 sm:py-14 lg:py-16`}
           style={{ backgroundColor: "var(--fh-surface-lo)" }}
         >
           <div className={container}>
@@ -137,7 +137,7 @@ export function HomePage() {
             </motion.h2>
 
             <motion.ul
-              className="mt-10 grid grid-cols-1 gap-8 sm:grid-cols-2 sm:gap-6 lg:mt-14 lg:grid-cols-3 lg:gap-8"
+              className="mt-10 grid grid-cols-1 gap-6 sm:grid-cols-2 sm:gap-6 lg:mt-12 lg:grid-cols-3 lg:gap-6"
               variants={staggerContainer}
               initial="hidden"
               animate={bikesInView ? "show" : "hidden"}
@@ -145,10 +145,10 @@ export function HomePage() {
               {bikesShowcase.map((bike) => (
                 <motion.li key={bike.slug} variants={staggerItem}>
                   <article
-                    className="flex h-full flex-col overflow-hidden rounded-3xl p-1.5 ring-1 ring-gray-200 sm:p-2"
+                    className="flex h-full flex-col overflow-hidden rounded-2xl border border-gray-200 p-2"
                     style={{ backgroundColor: "var(--fh-surface)" }}
                   >
-                    <div className="overflow-hidden rounded-2xl">
+                    <div className="overflow-hidden rounded-xl">
                       <BikeShowcaseCarousel
                         productLabel={bike.title}
                         images={bike.images}
@@ -170,8 +170,8 @@ export function HomePage() {
                       </p>
 
                       {/* Inclusief collapsible */}
-                      <details className="group mt-4 overflow-hidden rounded-2xl border border-gray-200">
-                        <summary className="flex cursor-pointer list-none select-none items-center justify-between px-4 py-3 text-xs font-bold uppercase tracking-widest text-gray-900 marker:content-none hover:bg-gray-50 [&::-webkit-details-marker]:hidden">
+                      <details className="group mt-4 overflow-hidden rounded-xl border border-gray-200">
+                        <summary className="flex cursor-pointer list-none select-none items-center justify-between px-4 py-3 text-xs font-semibold uppercase tracking-wide text-gray-900 marker:content-none hover:bg-gray-50 [&::-webkit-details-marker]:hidden">
                           Inclusief
                           <ChevronDown
                             className="h-4 w-4 shrink-0 text-gray-500 transition-transform group-open:rotate-180"
@@ -218,7 +218,7 @@ export function HomePage() {
         <section
           id="accessories"
           ref={accessoriesRef}
-          className={`border-t border-white/10 ${sectionPadX} py-14 sm:py-16 lg:py-20`}
+          className={`border-t border-gray-200/70 ${sectionPadX} py-14 sm:py-16 lg:py-20`}
           style={{ backgroundColor: "var(--fh-surface-lo)" }}
         >
           <div className={container}>
@@ -232,7 +232,7 @@ export function HomePage() {
             </motion.h2>
 
             <motion.div
-              className="mx-auto mt-8 grid max-w-md grid-cols-1 gap-5 sm:max-w-5xl sm:grid-cols-2 sm:gap-6 lg:mt-10 lg:gap-8"
+              className="mx-auto mt-8 grid max-w-md grid-cols-1 gap-5 sm:max-w-5xl sm:grid-cols-2 sm:gap-6 lg:mt-10 lg:gap-6"
               variants={staggerContainer}
               initial="hidden"
               animate={accessoriesInView ? "show" : "hidden"}
@@ -241,7 +241,7 @@ export function HomePage() {
                 <motion.article
                   key={item.slug}
                   variants={staggerItem}
-                  className="flex flex-col overflow-hidden rounded-3xl border border-gray-200 shadow-sm"
+                  className="flex flex-col overflow-hidden rounded-2xl border border-gray-200"
                   style={{ backgroundColor: "var(--fh-surface)" }}
                 >
                   <div className="flex h-36 items-center justify-center px-3 py-3 sm:h-40 md:h-44"
