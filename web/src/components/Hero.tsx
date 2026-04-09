@@ -10,11 +10,15 @@ import { buildCartOrderMessage, openWhatsAppOrder } from "../lib/whatsapp.ts";
 
 const easeOut = "easeOut" as const;
 
-/** Accessoires uitsluiten — alleen fietsmodellen in de hero-slideshow */
-const ACCESSORY_SLUGS = new Set(["smart-key-remote", "ride-essentials"]);
+/** Accessoires + niet-getoonde modellen uitsluiten uit de hero-slideshow */
+const HERO_SLIDESHOW_EXCLUDE = new Set([
+  "smart-key-remote",
+  "ride-essentials",
+  "v20-pro",
+]);
 
 function getHeroBikes(): Product[] {
-  return products.filter((p) => !ACCESSORY_SLUGS.has(p.slug));
+  return products.filter((p) => !HERO_SLIDESHOW_EXCLUDE.has(p.slug));
 }
 
 const heroBikes = getHeroBikes();
