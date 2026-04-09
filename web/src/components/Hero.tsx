@@ -111,9 +111,9 @@ function HeroImage() {
       onTouchStart={onTouchStart}
       onTouchEnd={onTouchEnd}
     >
-      <div className="pointer-events-none absolute inset-0 z-10 bg-gradient-to-l from-transparent via-transparent to-[#5c6370]/40 lg:to-[#5c6370]/50" />
+      <div className="pointer-events-none absolute inset-0 z-10 bg-gradient-to-l from-transparent via-transparent to-black/40 lg:to-black/50" />
       <div
-        className="relative w-full overflow-hidden px-0 pt-0 pb-[max(0.75rem,env(safe-area-inset-bottom))] lg:py-0"
+        className="relative w-full overflow-hidden bg-neutral-950 px-0 pt-0 pb-[max(0.75rem,env(safe-area-inset-bottom))] lg:py-0"
         role="region"
         aria-roledescription="carousel"
         aria-label="Uitgelichte fietsen"
@@ -192,7 +192,7 @@ function HeroImage() {
 export function Hero() {
   return (
     <section id="home" className="px-4 pb-12 pt-8 sm:px-6 lg:px-8 lg:pb-16 lg:pt-10">
-      <div className="mx-auto max-w-7xl overflow-hidden rounded-2xl bg-gradient-to-br from-[#7a8494] via-[#6d7784] to-[#5c6370] shadow-lg ring-1 ring-white/15 sm:rounded-3xl">
+      <div className="mx-auto max-w-7xl overflow-hidden rounded-2xl bg-neutral-950 shadow-lg ring-1 ring-white/15 sm:rounded-3xl">
         <div className="grid gap-0 lg:grid-cols-[1fr_1.05fr] lg:items-stretch">
           <div className="order-2 flex flex-col justify-center px-6 py-10 sm:px-10 sm:py-12 lg:order-1 lg:py-16 lg:pl-12 lg:pr-6 xl:pl-14">
             <div className="max-w-xl">

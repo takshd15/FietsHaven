@@ -4,7 +4,6 @@ import { useEffect, useRef, useState } from "react";
 import { ChevronDown, Menu, Search, ShoppingCart, X } from "lucide-react";
 import { useCart } from "../context/CartContext.tsx";
 import { buildCartOrderMessage, openWhatsAppOrder } from "../lib/whatsapp.ts";
-import { publicAsset } from "../lib/publicAsset.ts";
 
 const mainLinks = [
   { label: "Home", to: "/" },
@@ -20,8 +19,6 @@ const policyLinks = [
   { label: "Retourbeleid", to: "/policies/refund" },
   { label: "Beschadigde producten", to: "/policies/damaged" },
 ] as const;
-const mobileMenuBackdrop = publicAsset("home-bg-rider.png");
-
 function isHashLink(to: string): to is `/#${string}` {
   return to.startsWith("/#");
 }
@@ -81,7 +78,7 @@ export function Navbar() {
       initial={{ opacity: 0, y: -12 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.45, ease: "easeOut" }}
-      className="sticky top-0 z-50 border-b border-white/10 bg-[#5c6370]/95 backdrop-blur-md"
+      className="sticky top-0 z-50 border-b border-white/10 bg-black/95 backdrop-blur-md"
     >
       <nav className="mx-auto flex h-20 max-w-7xl items-center justify-between gap-4 px-6 lg:px-8">
         {/* Logo */}
@@ -158,7 +155,7 @@ export function Navbar() {
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -6 }}
                   transition={{ duration: 0.18 }}
-                  className="absolute left-0 top-full z-50 mt-1 min-w-[220px] rounded-2xl border border-white/15 bg-[#5c6370] py-2 shadow-xl"
+                  className="absolute left-0 top-full z-50 mt-1 min-w-[220px] rounded-2xl border border-white/15 bg-black py-2 shadow-xl"
                 >
                   {policyLinks.map(({ label, to }) => (
                     <Link
@@ -221,17 +218,8 @@ export function Navbar() {
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
             transition={{ duration: 0.25, ease: "easeOut" }}
-            className="relative overflow-hidden border-t border-white/10 bg-[#5c6370] lg:hidden"
+            className="relative overflow-hidden border-t border-white/10 bg-neutral-950 lg:hidden"
           >
-            <div className="pointer-events-none absolute inset-0" aria-hidden>
-              <img
-                src={mobileMenuBackdrop}
-                alt=""
-                className="h-full w-full object-cover object-[60%_44%] opacity-24"
-                loading="lazy"
-                decoding="async"
-              />
-            </div>
             <div className="relative z-10 max-h-[min(70vh,calc(100dvh-5rem))] overflow-y-auto px-4 py-5">
               <ul className="flex flex-col gap-1">
                 {mainLinks.map(({ label, to }) => {

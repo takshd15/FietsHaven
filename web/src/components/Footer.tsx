@@ -72,7 +72,7 @@ export function Footer() {
       initial={{ opacity: 0, y: 12 }}
       animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 12 }}
       transition={{ duration: 0.6, ease: "easeOut" }}
-      className="border-t border-neutral-700 bg-neutral-800 px-4 py-12 text-white sm:px-6 lg:px-8 lg:py-16"
+      className="border-t border-neutral-800 bg-neutral-950 px-4 py-12 text-white sm:px-6 lg:px-8 lg:py-16"
     >
       <div className="mx-auto grid max-w-7xl gap-12 lg:grid-cols-12 lg:gap-10">
         <div className="lg:col-span-4">
