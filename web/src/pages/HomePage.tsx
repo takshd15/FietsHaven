@@ -12,7 +12,7 @@ const easeOut = "easeOut" as const;
 
 const sectionPadX = "px-4 sm:px-6 lg:px-8";
 const container = "mx-auto max-w-7xl";
-const bikesSectionBackground = publicAsset("home-bg-alt-bike.png");
+const bikesSectionBackground = publicAsset("home-bg-rider.png");
 
 const staggerContainer: Variants = {
   hidden: { opacity: 0 },
